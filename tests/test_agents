@@ -1,0 +1,163 @@
+"""
+Unit tests for individual agents.
+
+Most tests use mocked LLM / search so they run without real API keys.
+Integration tests (marked `integration`) require ANTHROPIC_API_KEY.
+"""
+from __future__ import annotations
+
+import json
+from unittest.mock import MagicMock, patch
+
+import pytest
+
+from schemas.market import ProjectScope, MarketDynamics, MarketSize
+from schemas.opportunity import SignalRepository, ThematicAnalysis, OpportunityMatrix
+from schemas.gtm import GTMPlaybook
+
+
+# ────────────────────────────────────────────────────────────────
+# Fixtures
+# ────────────────────────────────────────────────────────────────
+
+@pytest.fixture
+def mock_scope() -> dict:
+    return {
+        "geography": ["Germany"],
+        "therapeutic_area": "Orthopedics",
+        "technology_category": "orthopedic robotics",
+        "product_category": "surgical robots",
+        "customer_segments": ["university hospitals", "mid-tier hospitals"],
+        "key_competitors": ["Stryker (Mako)", "Zimmer Biomet (ROSA)", "DePuy (VELYS)"],
+        "business_questions": ["Can we enter Germany?"],
+        "research_boundaries": "Robotic knee and hip systems only",
+        "clarifying_questions": [],
+        "confidence": "high",
+    }
+
+
+@pytest.fixture
+def mock_llm_client():
+    """LLMClient that returns preset JSON responses."""
+    client = MagicMock()
+
+    def complete_side_effect(user, system="", tools=None, max_tokens=None):
+        # Return a minimal valid ProjectScope JSON by default
+        return json.dumps({
+            "geography": ["Germany"],
+            "therapeutic_area": "Orthopedics",
+            "technology_category": "orthopedic robotics",
+            "product_category": "surgical robots",
+            "customer_segments": ["mid-tier hospitals"],
+            "key_competitors": ["Stryker"],
+            "business_questions": ["Market entry feasibility?"],
+            "research_boundaries": "Knee robotics",
+            "clarifying_questions": [],
+            "confidence": "medium",
+        })
+
+    client.complete.side_effect = complete_side_effect
+    return client
+
+
+# ────────────────────────────────────────────────────────────────
+# Schema validation tests (no LLM required)
+# ────────────────────────────────────────────────────────────────
+
+class TestSchemas:
+    def test_project_scope_valid(self, mock_scope):
+        scope = ProjectScope(**mock_scope)
+        assert scope.geography == ["Germany"]
+        assert len(scope.key_competitors) == 3
+
+    def test_market_size_defaults(self):
+        ms = MarketSize(
+            geography="Germany",
+            base_year=2024,
+            total_market_value_musd=210.0,
+            serviceable_market_musd=50.0,
+        )
+        assert ms.competitor_shares == []
+        assert ms.confidence == "medium"
+
+    def test_opportunity_matrix_sorting(self):
+        from schemas.opportunity import ScoredOpportunity, OpportunityMatrix
+        opps = [
+            ScoredOpportunity(
+                bucket_id="OB01", name="A",
+                attractiveness=8, ability_to_win=7, strategic_fit=8, speed_to_revenue=7,
+                weighted_score=7.5, decision_call="Do now",
+                recommended_move="Enter now", rationale="Strong fit",
+            ),
+            ScoredOpportunity(
+                bucket_id="OB02", name="B",
+                attractiveness=4, ability_to_win=4, strategic_fit=4, speed_to_revenue=4,
+                weighted_score=4.0, decision_call="Low priority",
+                recommended_move="Monitor", rationale="Weak",
+            ),
+        ]
+        matrix = OpportunityMatrix(scored_opportunities=opps)
+        assert matrix.scored_opportunities[0].weighted_score == 7.5
+
+
+# ────────────────────────────────────────────────────────────────
+# Agent unit tests (mocked LLM)
+# ────────────────────────────────────────────────────────────────
+
+class TestScopeAgent:
+    def test_run_returns_project_scope(self, mock_llm_client, tmp_path):
+        from agents.scope_agent import ScopeAgent
+        from core.state_manager import StateManager
+
+        state = StateManager(run_id="test")
+        state._path = tmp_path / "state.json"
+
+        agent = ScopeAgent(llm=mock_llm_client, state=state)
+        # Patch web search to return nothing
+        agent.search = MagicMock()
+        agent.search.search.return_value = []
+
+        result = agent.execute({"brief_text": "Client wants to enter German orthopedic robotics market."})
+        assert isinstance(result, ProjectScope)
+        assert "Germany" in result.geography
+
+
+class TestScoringAgent:
+    def test_weighted_score_computed_correctly(self):
+        from agents.scoring_agent import _decision_call
+        assert _decision_call(8.0) == "Do now"
+        assert _decision_call(7.0) == "Winnable"
+        assert _decision_call(5.5) == "Plan"
+        assert _decision_call(3.0) == "Low priority"
+
+
+# ────────────────────────────────────────────────────────────────
+# Orchestrator smoke test (mocked)
+# ────────────────────────────────────────────────────────────────
+
+class TestOrchestrator:
+    def test_pipeline_runs_without_errors(self, tmp_path, mock_scope):
+        """Smoke test: orchestrator runs market_landscape module with mocked agents."""
+        from core.orchestrator import Orchestrator, AssessmentConfig
+
+        config = AssessmentConfig(
+            brief_text="Enter orthopedic robotics market in Germany.",
+            geography=["Germany"],
+            module="market_landscape",
+            run_id="smoke",
+        )
+
+        orch = Orchestrator(config)
+        orch.state._path = tmp_path / "state.json"
+
+        # Patch all agents to return mocked outputs
+        with patch("core.orchestrator.ScopeAgent") as MockScope, \
+             patch("core.orchestrator.MarketDynamicsAgent") as MockDyn, \
+             patch("core.orchestrator.MarketSizingAgent") as MockSize:
+
+            for Mock in [MockScope, MockDyn, MockSize]:
+                instance = Mock.return_value
+                instance.execute.return_value = MagicMock()
+
+            results = orch.run()
+            assert isinstance(results, dict)
