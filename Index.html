@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedTech Opportunity Assessment & Decision Support · Evalueserve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple:#43224d;--purple-deep:#2e1735;--purple-mid:#5a3466;--lav:#9b7aa8;--lav-l:#c9a2d6;
+  --red:#e0044e;--red-soft:#ffe3ec;
+  --gray:#4c4c4d;--muted:#8a7f90;--muted-l:#b7abbf;
+  --bg:#f4f2f7;--card:#fff;--line:#e8e2ee;--line-soft:#f0ecf4;
+  --amber:#b8860b;--amber-bg:#fdf3e0;--green:#1b7a54;--green-bg:#e5f4ec;--blue:#1f5fa8;--blue-bg:#e8f0fb;
+  --disp:'Crimson Text',Georgia,serif;--ui:'Poppins',Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--ui);color:var(--gray);background:var(--purple-deep);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{color:var(--purple);letter-spacing:-.01em;line-height:1.2}
+button{font-family:var(--ui);cursor:pointer}
+a{color:var(--red);text-decoration:none}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px;border-radius:4px}
+.hidden{display:none!important}
+.est{font-size:9.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border-radius:4px;padding:1px 5px;vertical-align:middle;margin-left:5px}
+
+/* ========== LOGIN ========== */
+.scene{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;background:radial-gradient(120% 120% at 50% 0%,#4a2755 0%,var(--purple-deep) 70%)}
+.login{width:min(980px,100%);display:grid;grid-template-columns:1.1fr .9fr;border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.brandpane{background:var(--purple);padding:52px 46px;color:#fff}
+.brandpane .eyebrow{font-size:11px;letter-spacing:.24em;color:#c9b6d3;font-weight:600}
+.brandpane h1{color:#fff;font-family:var(--disp);font-size:38px;font-weight:700;margin:20px 0 18px;line-height:1.1}
+.brandpane p{color:#d3c4db;font-size:14px;max-width:42ch}
+.brandpane ul{list-style:none;margin-top:24px}
+.brandpane li{position:relative;padding:6px 0 6px 22px;font-size:13px;color:#e6dcec}
+.brandpane li::before{content:"";position:absolute;left:0;top:13px;width:7px;height:7px;border-radius:50%;background:var(--red)}
+.brandpane .proto{margin-top:30px;font-size:11px;color:#9a86a4}
+.formpane{background:#fff;padding:52px 44px;display:flex;flex-direction:column;justify-content:center}
+.formpane .wb{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:600}
+.formpane h2{font-size:23px;margin:8px 0 4px}
+.formpane .sub{font-size:13px;color:var(--muted)}
+.sso{width:100%;margin-top:22px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:13px;font-weight:600;font-size:14px;color:var(--gray);display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s}
+.sso:hover{border-color:var(--purple);background:#faf8fc}
+.or{text-align:center;font-size:12px;color:var(--muted-l);margin:15px 0}
+.field{margin-bottom:15px}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px}
+.field input{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:var(--ui);font-size:14px;color:var(--gray);transition:.12s}
+.field input:focus{border-color:var(--red);outline:none;box-shadow:0 0 0 3px rgba(224,4,78,.08)}
+.btn-primary{width:100%;border:none;background:var(--red);color:#fff;border-radius:10px;padding:14px;font-weight:600;font-size:15px;transition:.12s}
+.btn-primary:hover{background:#c30343;transform:translateY(-1px);box-shadow:0 6px 20px rgba(224,4,78,.3)}
+.powered{text-align:center;font-size:11px;color:var(--muted-l);margin-top:16px}
+
+/* ========== ROLE ========== */
+.rolecard{width:min(560px,100%);background:#fff;border-radius:18px;padding:44px 42px;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.rolecard .signed{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600}
+.rolecard h2{font-size:25px;margin:10px 0 6px}
+.rolecard .sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.roleopt{display:flex;gap:16px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:15px 18px;margin-bottom:13px;cursor:pointer;transition:.12s}
+.roleopt:hover{border-color:var(--purple-mid);background:#faf8fc}
+.roleopt[aria-checked="true"]{border-color:var(--red);background:#fff6f9}
+.roleopt .ic{flex:0 0 auto;width:42px;height:42px;border-radius:10px;background:var(--line-soft);display:flex;align-items:center;justify-content:center;color:var(--purple);transition:.12s}
+.roleopt[aria-checked="true"] .ic{background:var(--red-soft);color:var(--red)}
+.roleopt .rt{font-weight:600;color:var(--purple);font-size:15px}
+.roleopt .rd{font-size:12.5px;color:var(--muted)}
+.enter{width:100%;border:none;background:var(--purple);color:#fff;border-radius:11px;padding:14px;font-weight:600;font-size:15px;margin-top:6px;transition:.12s}
+.enter:hover{background:var(--purple-deep);transform:translateY(-1px)}
+
+/* ========== APP SHELL ========== */
+#app{display:grid;grid-template-columns:266px 1fr;min-height:100vh;background:var(--bg)}
+.side{background:linear-gradient(180deg,var(--purple),var(--purple-deep));color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.side::-webkit-scrollbar{width:4px}.side::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+.side .head{padding:20px 20px 14px}
+.side .head .brand{font-size:11.5px;letter-spacing:.22em;font-weight:600;color:#e7d9ee}
+.side .head .prod{font-family:var(--disp);font-size:19px;font-weight:700;color:#fff;margin-top:2px;line-height:1.15}
+.side .head .pill{display:inline-flex;gap:6px;margin-top:11px;font-size:10px;color:#f0c9d9;background:rgba(224,4,78,.16);border:1px solid rgba(224,4,78,.4);border-radius:999px;padding:3px 10px}
+.navgroup{padding:6px 12px}
+.navgroup .lbl{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#a98fb5;padding:11px 10px 5px}
+.navitem{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:none;color:#d9cbe0;padding:9px 10px;border-radius:9px;font-size:13.5px;font-weight:500;transition:.12s}
+.navitem svg{flex:0 0 auto;opacity:.85}
+.navitem:hover{background:rgba(255,255,255,.07);color:#fff}
+.navitem.active{background:rgba(224,4,78,.16);color:#fff;box-shadow:inset 3px 0 0 var(--red)}
+.navitem .chev{margin-left:auto;transition:transform .18s}
+.navitem.open .chev{transform:rotate(90deg)}
+.subnav{overflow:hidden;max-height:0;transition:max-height .25s ease;margin-left:8px;border-left:1px solid rgba(255,255,255,.1);padding-left:4px}
+.subnav.show{max-height:320px}
+.subitem{display:block;width:100%;text-align:left;background:none;border:none;color:#c3b2cd;padding:8px 10px 8px 26px;border-radius:8px;font-size:12.5px;font-weight:400;position:relative;transition:.12s}
+.subitem:hover{background:rgba(255,255,255,.06);color:#fff}
+.subitem.active{color:#fff;font-weight:600}
+.subitem.active::before{content:"";position:absolute;margin-left:-14px;margin-top:6px;width:6px;height:6px;border-radius:50%;background:var(--red)}
+.gatestat{margin-top:auto;padding:14px 18px;border-top:1px solid rgba(255,255,255,.1)}
+.gatestat .gt{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#a98fb5;margin-bottom:8px}
+.gaterow{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#e2d6e8;margin-bottom:6px}
+.dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.dot.pass{background:#3fce8f}.dot.pend{background:#f2b23e}.dot.na{background:#7a6a83}
+
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--line);padding:12px 26px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:20}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--purple);font-weight:600}
+.search{flex:1;max-width:400px;display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 12px;color:var(--muted-l);font-size:13px;transition:.12s}
+.search:focus-within{border-color:var(--purple-mid)}
+.search input{border:none;background:none;outline:none;flex:1;font-family:var(--ui);font-size:13px;color:var(--gray)}
+.illus{margin-left:auto;font-size:11px;color:var(--amber);background:var(--amber-bg);border:1px solid #f0d9a8;border-radius:8px;padding:5px 10px;font-weight:600;display:flex;align-items:center;gap:6px}
+.bell{position:relative;border:1px solid var(--line);background:#fff;border-radius:9px;width:38px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--purple);transition:.12s}
+.bell:hover{border-color:var(--purple)}
+.bell .cnt{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:10px;font-weight:700;border-radius:999px;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.bellpanel{position:absolute;top:46px;right:0;width:320px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 50px rgba(46,23,53,.22);overflow:hidden;z-index:40}
+.bellpanel .bh{padding:13px 16px;border-bottom:1px solid var(--line);font-weight:600;font-size:13px;color:var(--purple);display:flex;justify-content:space-between;align-items:center}
+.bellpanel .bh span{font-size:11px;color:var(--red);font-weight:500;cursor:pointer}
+.bellitem{display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid var(--line-soft)}
+.bellitem:last-child{border-bottom:none}
+.bellitem .bd{width:8px;height:8px;border-radius:50%;margin-top:6px;flex:0 0 auto}
+.bellitem .bt{font-size:12.5px;font-weight:500;color:var(--purple)}
+.bellitem .bs{font-size:11.5px;color:var(--muted)}
+.modebadge{font-size:12px;color:var(--purple);background:var(--line-soft);border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-weight:500}
+
+.canvas{padding:26px;overflow-y:auto;flex:1}
+.view{display:none;animation:fade .22s ease}.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.vhead{margin-bottom:18px}
+.vhead .eb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+.vhead h2{font-size:26px;margin-top:5px;font-family:var(--disp);font-weight:700}
+.vhead p{font-size:13.5px;color:var(--muted);max-width:80ch;margin-top:5px}
+
+/* Countries */
+.countries{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.filterlbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-right:2px}
+.ctab{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 13px;font-size:12.5px;font-weight:500;color:var(--gray);display:flex;align-items:center;gap:7px;transition:.12s;cursor:pointer}
+.ctab:hover{border-color:var(--purple-mid)}
+.ctab.on{background:var(--purple);border-color:var(--purple);color:#fff}
+.ctab .flag{font-size:14px}
+
+/* Cards & Grid */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.grid{display:grid;gap:16px}
+.g5{grid-template-columns:repeat(5,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}
+.kpi .lbl{font-size:11.5px;color:var(--muted);font-weight:500}
+.kpi .num{font-family:var(--disp);font-size:30px;font-weight:700;color:var(--purple);line-height:1.1;margin-top:5px}
+.kpi .num.red{color:var(--red)}
+.kpi .delta{font-size:11.5px;color:var(--green);margin-top:5px;font-weight:500}
+.kpi .delta.n{color:var(--muted)}
+
+.sectitle{font-size:15px;font-weight:600;color:var(--purple);margin:22px 0 12px;display:flex;align-items:center;gap:10px}
+.sectitle .tag{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--muted);background:var(--line-soft);border-radius:6px;padding:2px 8px}
+.mini-h{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);font-weight:600;margin-bottom:10px}
+
+/* Cockpit */
+.cockpit-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.verdict{background:linear-gradient(105deg,var(--purple),#5a2f66);color:#fff;border-radius:16px;padding:22px 24px;display:flex;flex-direction:column;justify-content:center}
+.verdict .badge2{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#f7c6d8;font-weight:600}
+.verdict h3{color:#fff;font-family:var(--disp);font-size:30px;margin:5px 0 6px}
+.verdict p{color:#e2d3e9;font-size:12.5px;max-width:44ch}
+.verdict .reg{margin-top:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:10px 14px;font-size:11.5px;color:#eadff0}
+.verdict .reg .ok{color:#5fe0a3;font-weight:600}
+.donutcard,.prizecard{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.donutcard .cap{font-size:11px;color:var(--muted);margin-top:2px;max-width:22ch}
+.prizecard .plabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.prizecard .pnum{font-family:var(--disp);font-size:34px;font-weight:700;color:var(--red);line-height:1.05;margin:8px 0 2px}
+.prizecard .psub{font-size:11.5px;color:var(--muted)}
+.gaugebar{width:100%;height:9px;border-radius:6px;background:var(--line-soft);overflow:hidden;margin-top:12px}
+.gaugebar>span{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--purple));transition:width .5s ease}
+
+/* Progress tracker */
+.tracker{display:flex;gap:0;margin-top:6px}
+.tstep{flex:1;text-align:center;position:relative}
+.tstep .tc{width:34px;height:34px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;border:2px solid var(--line);background:#fff;color:var(--muted);position:relative;z-index:2}
+.tstep.done .tc{background:var(--purple);border-color:var(--purple);color:#fff}
+.tstep.active .tc{background:var(--red);border-color:var(--red);color:#fff}
+.tstep .tl{font-size:11px;margin-top:7px;color:var(--gray);font-weight:500}
+.tstep .tp{font-size:10.5px;color:var(--muted)}
+.tstep::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:2px;background:var(--line);z-index:1}
+.tstep:first-child::before{display:none}
+.tstep.done::before,.tstep.active::before{background:var(--purple)}
+
+/* Highlight cards */
+.hl-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#fff;transition:.15s;cursor:pointer}
+.hl-card:hover{border-color:var(--purple-mid);transform:translateY(-2px);box-shadow:0 8px 20px rgba(67,34,77,.08)}
+.hl-card .ht{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:600}
+.hl-card .hv{font-family:var(--disp);font-size:20px;font-weight:700;color:var(--purple);margin:6px 0 4px}
+.hl-card .hd{font-size:12px;color:var(--muted)}
+
+/* Action rows */
+.actrow{display:flex;align-items:flex-start;gap:13px;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.actrow:last-child{border-bottom:none}
+.actrow .ai{flex:0 0 auto;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.actrow .ttl{font-weight:600;color:var(--purple);font-size:13.5px}
+.actrow .ds{font-size:12px;color:var(--muted)}
+.actrow .st{margin-left:auto;font-size:10.5px;font-weight:600;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.st.due{background:var(--red-soft);color:var(--red)}.st.appr{background:var(--green-bg);color:var(--green)}.st.info{background:var(--blue-bg);color:var(--blue)}.st.triage{background:var(--amber-bg);color:var(--amber)}
+
+/* Tables */
+table.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+table.tbl th{text-align:left;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:9px 11px;border-bottom:1px solid var(--line)}
+table.tbl td{padding:11px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl td.co{font-weight:600;color:var(--purple)}
+.pillmini{font-size:10.5px;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.p-lead{background:var(--purple);color:#fff}.p-str{background:var(--green-bg);color:var(--green)}.p-gap{background:var(--red-soft);color:var(--red)}.p-mid{background:var(--amber-bg);color:var(--amber)}
+
+/* Bars */
+.bar{height:8px;border-radius:6px;background:var(--line-soft);overflow:hidden;margin-top:5px}
+.bar>span{display:block;height:100%;background:var(--purple);transition:width .5s ease}
+.bar>span.r{background:var(--red)}
+
+/* Themes */
+.theme{font-size:12.5px;padding:7px 0 7px 18px;position:relative;border-bottom:1px dashed var(--line)}
+.theme:last-child{border-bottom:none}
+.theme::before{content:"";position:absolute;left:2px;top:14px;width:6px;height:6px;border-radius:50%;background:var(--red)}
+.src{display:inline-block;font-size:10px;color:var(--muted);background:var(--line-soft);border-radius:5px;padding:1px 6px;margin-left:5px}
+
+/* Heat map */
+.heat{display:grid;gap:4px;font-size:11.5px}
+.heat .hc{padding:9px 6px;text-align:center;border-radius:6px;font-weight:600}
+.heat .rh{padding:9px 8px;text-align:left;font-weight:500;color:var(--gray);font-size:11.5px}
+.heat .ch{padding:8px 4px;text-align:center;font-weight:600;color:var(--purple);font-size:11px}
+.hs1{background:#f6d0d3;color:#8a2a34}.hs2{background:#fbe0cf;color:#8a4a24}.hs3{background:#fdefcf;color:#7a5f16}.hs4{background:#e5efd6;color:#4a5f24}.hs5{background:#cfe9db;color:#1b5f43}
+.heat .ent{box-shadow:inset 0 0 0 2px var(--purple)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11.5px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* Perceptual/prioritization map */
+.pmap{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;aspect-ratio:1.15/1}
+.pmap .ax{position:absolute;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--muted-l)}
+.pmap .axx{bottom:10px;left:50%;transform:translateX(-50%)}
+.pmap .axy{top:50%;left:12px;transform:rotate(-90deg) translateX(50%);transform-origin:left top}
+.pmap .ql{position:absolute;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:#c3b6ca;font-weight:600}
+.pmap .tl{top:14px;left:48px}.pmap .tr{top:14px;right:16px}.pmap .bl{bottom:40px;left:48px}.pmap .br{bottom:40px;right:16px}
+.pmap .gh,.pmap .gv{position:absolute;background:var(--line)}
+.pmap .gh{left:40px;right:14px;top:50%;height:1px}.pmap .gv{top:14px;bottom:38px;left:50%;width:1px}
+.pmap .qbg{position:absolute;top:14px;bottom:38px;left:40px;right:14px}
+.pmap .qbg::before{content:"";position:absolute;right:0;top:0;width:50%;height:50%;background:rgba(27,122,84,.06)}
+.pt{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.pt .d{border-radius:50%;background:rgba(67,34,77,.16);border:2px solid var(--purple);transition:.15s}
+.pt.red .d{background:rgba(224,4,78,.18);border-color:var(--red)}
+.pt .pl{font-size:10px;font-weight:600;color:var(--purple);margin-top:3px;white-space:nowrap;background:#fff;padding:0 3px;border-radius:3px}
+.pt:hover .d{transform:scale(1.1)}
+
+/* Radar */
+.chartrow{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:center}
+
+/* Funnel */
+.funnel{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fnode{flex:1;min-width:150px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;text-align:center}
+.fnode .fn{font-family:var(--disp);font-size:28px;font-weight:700;color:var(--red)}
+.fnode .ft{font-size:12px;font-weight:600;color:var(--purple);margin-top:2px}
+.fnode .fd{font-size:11px;color:var(--muted)}
+.farrow{color:var(--red);font-size:22px;font-weight:600;flex:0 0 auto}
+
+/* Ranking */
+.rankrow td .scorebar{display:flex;align-items:center;gap:8px}
+.rankrow td .scorebar .bar{flex:1;margin-top:0}
+.rank-badge{font-family:var(--disp);font-size:18px;font-weight:700;color:var(--purple)}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:6px}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:15px}
+.step .no{font-family:var(--disp);font-size:20px;font-weight:700;color:var(--red)}
+.step h4{font-size:13px;margin:5px 0}.step p{font-size:11.5px;color:var(--muted)}
+
+.progress-lg{height:12px;border-radius:8px;background:var(--line-soft);overflow:hidden}
+.progress-lg>span{display:block;height:100%;border-radius:8px}
+
+.senti{display:flex;align-items:baseline;gap:8px}
+.senti .s{font-family:var(--disp);font-size:26px;font-weight:700}.senti .o{font-size:11px;color:var(--muted)}
+.s-pos{color:var(--green)}.s-mid{color:var(--amber)}.s-neg{color:var(--red)}
+.quote{background:var(--bg);border-left:3px solid var(--red);border-radius:0 10px 10px 0;padding:12px 16px;font-size:12.5px;color:var(--gray);font-style:italic;margin-bottom:10px}
+.quote .qa{display:block;font-style:normal;font-size:11px;color:var(--muted);margin-top:6px}
+
+/* GTM */
+.gtm-rec{background:linear-gradient(105deg,var(--purple),#5a2f66);color:#fff;border-radius:14px;padding:22px}
+.gtm-rec .t{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#f7c6d8;font-weight:600}
+.gtm-rec h3{color:#fff;font-family:var(--disp);font-size:21px;margin:6px 0 8px}.gtm-rec p{color:#e2d3e9;font-size:12.5px}
+.gtm-list{list-style:none}
+.gtm-list li{font-size:12.5px;padding:7px 0 7px 18px;position:relative;border-bottom:1px solid var(--line-soft)}
+.gtm-list li:last-child{border-bottom:none}
+.gtm-list li::before{content:"";position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--red)}
+
+/* Roadmap */
+.road{display:flex;gap:0;margin-top:8px}
+.rlane{flex:1;padding:0 6px}
+.rlane .rq{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;border-bottom:2px solid var(--line);padding-bottom:6px;margin-bottom:8px}
+.rlane .ri{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;padding:8px 10px;font-size:11.5px;margin-bottom:6px;color:var(--gray)}
+
+.footer-note{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted-l)}
+.ctx-banner{font-size:12px;color:var(--purple);background:var(--line-soft);border:1px solid var(--line);border-radius:9px;padding:8px 14px;margin-bottom:16px;display:inline-block}
+.ctx-banner b{color:var(--red)}
+
+/* Scoped placeholder */
+.scoped{max-width:560px;margin:60px auto;text-align:center}
+.scoped .ic{width:64px;height:64px;border-radius:16px;background:var(--line-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--purple)}
+.scoped h2{font-size:24px;font-family:var(--disp)}.scoped p{color:var(--muted);font-size:14px;margin-top:8px}
+
+/* AI badges */
+.aibadge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;border-radius:6px;padding:2px 7px;vertical-align:middle;letter-spacing:.01em}
+.aibadge svg{width:11px;height:11px;flex:0 0 auto}
+.ai-gen{background:#efe7fb;color:#5b2a9e}.ai-agent{background:#e6f0fb;color:#1f5fa8}.ai-accel{background:#fdeecf;color:#8a5a00}.ai-human{background:#e9e4ee;color:#43224d}
+.ailegend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:11.5px;color:var(--muted)}
+.ainote{font-size:11.5px;color:var(--muted);margin-top:10px;background:var(--bg);border:1px dashed var(--line);border-radius:9px;padding:9px 13px}
+.ainote b{color:var(--purple)}
+
+/* Provenance */
+.provbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fbf7fd;border:1px dashed #d9c9e2;border-radius:10px;padding:9px 14px;margin-bottom:16px;font-size:12px}
+.provbar .pv-src{font-weight:600;color:var(--purple);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.provbar .pv-pct{color:var(--red);font-weight:700}
+.provbar .pv-q{font-style:italic;color:var(--muted);flex:1;min-width:220px}
+
+/* Methodology tabs */
+.mtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:2px}
+.mtab{border:none;background:none;padding:9px 14px;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;border-radius:6px 6px 0 0;transition:.12s}
+.mtab:hover{color:var(--purple);background:var(--line-soft)}
+.mtab.on{color:var(--purple);font-weight:600;border-bottom-color:var(--red)}
+.mpane{display:none;animation:fade .2s ease}.mpane.active{display:block}
+
+/* Personas */
+.personas{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.persona{text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 10px}
+.persona .pic{width:46px;height:46px;border-radius:50%;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.persona .pn{font-size:12px;font-weight:600;color:var(--purple)}
+.bandlabel{text-align:center;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--line-soft);border-radius:8px;padding:6px;margin:12px 0}
+
+/* Best practices quad */
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad .qc{border:1px solid var(--line);border-radius:12px;padding:18px;background:#fff}
+.quad .qc h4{font-size:13.5px;color:var(--purple);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.quad .qc .qi{width:28px;height:28px;border-radius:8px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.quad .qc li{font-size:12px;padding:4px 0 4px 16px;position:relative;color:var(--gray)}
+.quad .qc li::before{content:"";position:absolute;left:2px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--red)}
+.quad .qc ul{list-style:none}
+
+/* Questionnaire */
+.qz{border:1px solid var(--line);border-radius:12px;padding:18px;background:#fff}
+.qz .qzh{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.qz .qzh h4{font-size:15px}
+.qz .split{font-size:11px;font-weight:600;color:var(--purple);background:var(--line-soft);border-radius:8px;padding:4px 10px}
+.qitem{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.qitem:last-child{border-bottom:none}
+.qitem .qt{font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:5px;padding:2px 6px;height:fit-content;white-space:nowrap;margin-top:2px}
+.qt-open{background:#e6f0fb;color:#1f5fa8}.qt-closed{background:#e5f4ec;color:#1b7a54}
+.qitem .qtext{font-size:12.5px;color:var(--gray)}
+
+/* Vendor steps */
+.vsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* Role-based visibility */
+.role-viewer .editor-only{display:none!important}
+
+@media(max-width:1080px){
+  .login{grid-template-columns:1fr}.brandpane{display:none}
+  #app{grid-template-columns:1fr}.side{position:static;height:auto}
+  .cockpit-top{grid-template-columns:1fr}.g5,.g4{grid-template-columns:1fr 1fr}
+  .g3,.g2,.chartrow,.steps,.tracker,.road,.vsteps,.personas{grid-template-columns:1fr}
+  .quad{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body class="role-admin">
+
+<!-- ===== LOGIN ===== -->
+<div class="scene" id="login">
+  <div class="login">
+    <div class="brandpane">
+      <div class="eyebrow">EVALUESERVE</div>
+      <h1>MedTech Opportunity Assessment &amp; Decision Support</h1>
+      <p>One governed workspace that turns market, competitor and voice-of-market evidence into a defensible market-entry decision, and a go-to-market playbook if the answer is go.</p>
+      <ul>
+        <li>Executive decision cockpit with stage-adjusted go probability</li>
+        <li>Role-based access · multi-market filter</li>
+        <li>Competitor strategy deep-dives, heat maps and web-diagrams</li>
+        <li>Ranking &amp; prioritisation grids and a GTM playbook</li>
+      </ul>
+      <div class="proto">Illustrative prototype · directional placeholder figures</div>
+    </div>
+    <div class="formpane">
+      <div class="wb">Welcome back</div>
+      <h2>Sign in to your workspace</h2>
+      <div class="sub">Use your corporate identity provider.</div>
+      <button class="sso" onclick="go('roles')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Continue with single sign-on
+      </button>
+      <div class="or">or sign in with email</div>
+      <div class="field"><label>Work email</label><input type="email" value="MedTechAdmin@evalueserve.com" autocomplete="username"></div>
+      <div class="field"><label>Password</label><input type="password" value="placeholder" autocomplete="current-password"></div>
+      <button class="btn-primary" onclick="go('roles')">Sign in &rarr;</button>
+      <div class="powered">Powered by Evalueserve Lifesciences Strategy</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ROLE PICKER ===== -->
+<div class="scene hidden" id="roles">
+  <div class="rolecard">
+    <div class="signed">Signed in · MedTechAdmin@evalueserve.com</div>
+    <h2>Choose how you'll enter</h2>
+    <div class="sub">Your account holds more than one level of access. Pick how you want to enter; you can switch later.</div>
+    <div class="roleopt" role="radio" aria-checked="true" tabindex="0" data-role="admin" data-mode="Hub Owner / Editor Mode">
+      <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+      <div><div class="rt">Hub Owner / Editor</div><div class="rd">Curate, approve and publish the assessment</div></div>
+    </div>
+    <div class="roleopt" role="radio" aria-checked="false" tabindex="0" data-role="contributor" data-mode="Contributor Mode">
+      <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></div>
+      <div><div class="rt">Contributor</div><div class="rd">Upload evidence and draft findings for review</div></div>
+    </div>
+    <div class="roleopt" role="radio" aria-checked="false" tabindex="0" data-role="viewer" data-mode="Viewer Mode">
+      <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div><div class="rt">Viewer</div><div class="rd">Browse the decision, evidence and recommendations</div></div>
+    </div>
+    <button class="enter" onclick="enterHub()">Enter workspace &rarr;</button>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app" class="hidden">
+  <aside class="side">
+    <div class="head">
+      <div class="brand">EVALUESERVE</div>
+      <div class="prod">Opportunity Assessment Hub</div>
+      <span class="pill" id="faPill">Orthopedic Robotics · EU entry</span>
+    </div>
+
+    <nav class="navgroup">
+      <div class="lbl">Focus area</div>
+      <button class="navitem fa active" data-fa="robotics"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V5a3 3 0 0 1 6 0v3"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg> Orthopedic Robotics</button>
+      <button class="navitem fa" data-fa="sports"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18M3 12h18"/></svg> Sports Medicine</button>
+      <button class="navitem fa" data-fa="wound"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg> Wound Therapy</button>
+    </nav>
+
+    <div id="roboNav">
+      <nav class="navgroup">
+        <div class="lbl">Workspace</div>
+        <button class="navitem active" data-view="cockpit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Decision Cockpit</button>
+      </nav>
+      <nav class="navgroup">
+        <div class="lbl">Evidence base</div>
+        <button class="navitem" data-view="market"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg> Market Landscape</button>
+        <button class="navitem" data-group="comp" data-view="comp-product"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M4 7h16M6 7l-3 6h6ZM18 7l-3 6h6Z"/></svg> Competitor Landscape <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></button>
+        <div class="subnav" id="sub-comp">
+          <button class="subitem" data-view="comp-product">Product Strategy</button>
+          <button class="subitem" data-view="comp-pricing">Pricing Strategy</button>
+          <button class="subitem" data-view="comp-promo">Promotional Strategy</button>
+          <button class="subitem" data-view="comp-channel">Channel Strategy</button>
+        </div>
+        <button class="navitem" data-group="voc" data-view="voc-method"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg> Voice of Customers <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></button>
+        <div class="subnav" id="sub-voc">
+          <button class="subitem" data-view="voc-method">Approach &amp; Screening</button>
+          <button class="subitem" data-view="voc-qual">Qualitative (20 KOLs)</button>
+          <button class="subitem" data-view="voc-quant">Quantitative (150 survey)</button>
+        </div>
+      </nav>
+      <nav class="navgroup">
+        <div class="lbl">Decision &amp; output</div>
+        <button class="navitem" data-view="matrix"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg> Opportunity Matrix</button>
+        <button class="navitem" data-view="gtm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3Z"/><path d="M9 3v15M15 6v15"/></svg> GTM Playbook</button>
+      </nav>
+      <nav class="navgroup">
+        <div class="lbl">Reference</div>
+        <button class="navitem" data-view="methodology"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg> Methodology &amp; Approach</button>
+      </nav>
+    </div>
+
+    <div class="gatestat">
+      <div class="gt">Gate status · <span class="cty">Germany</span></div>
+      <div class="gaterow"><span class="dot na"></span> Regulatory · CE / MDR in place</div>
+      <div class="gaterow"><span class="dot pass"></span> Gate 1 · Commercial viability</div>
+      <div class="gaterow"><span class="dot pend"></span> Gate 2 · Final go / no-go</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb"><span class="cty">Germany</span> › <b id="crumbView">Decision Cockpit</b></div>
+      <div class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="searchInput" placeholder="Search evidence, competitors, opportunities…" oninput="handleSearch(this.value)">
+      </div>
+      <div class="illus">⚡ Illustrative figures</div>
+      <div style="position:relative">
+        <button class="bell" onclick="toggleBell(event)" aria-label="Reminders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="cnt" id="bellCnt">3</span>
+        </button>
+        <div class="bellpanel hidden" id="bellPanel">
+          <div class="bh">Reminders <span onclick="markAllRead()">Mark all read</span></div>
+          <div class="bellitem"><span class="bd" style="background:var(--red)"></span><div><div class="bt">Approve Gate 1 viability memo</div><div class="bs">Due today · required before primary launch</div></div></div>
+          <div class="bellitem"><span class="bd" style="background:var(--amber)"></span><div><div class="bt">Validate pricing assumptions</div><div class="bs">Reimbursement model locks Friday</div></div></div>
+          <div class="bellitem"><span class="bd" style="background:var(--blue)"></span><div><div class="bt">VoC fielding at 40%</div><div class="bs">8 of 20 KOL interviews complete</div></div></div>
+        </div>
+      </div>
+      <div class="modebadge" id="modeBadge">Hub Owner / Editor Mode</div>
+    </div>
+
+    <div class="canvas" id="canvas">
+
+      <!-- ===== COCKPIT ===== -->
+      <section class="view active" id="v-cockpit">
+        <div class="countries">
+          <span class="filterlbl">Market filter</span>
+          <button class="ctab on" data-cty="Germany"><span class="flag">🇩🇪</span> Germany</button>
+          <button class="ctab" data-cty="France"><span class="flag">🇫🇷</span> France</button>
+          <button class="ctab" data-cty="Italy"><span class="flag">🇮🇹</span> Italy</button>
+          <button class="ctab" data-cty="Spain"><span class="flag">🇪🇸</span> Spain</button>
+          <button class="ctab" data-cty="UK"><span class="flag">🇬🇧</span> UK</button>
+        </div>
+        <div class="cockpit-top">
+          <div class="verdict">
+            <div class="badge2">Preliminary verdict · <span class="cty">Germany</span></div>
+            <h3 id="cc-verdict">Conditional Go</h3>
+            <p id="cc-verdictp">Secondary evidence supports a service-led, mid-tier entry. Verdict holds pending Gate 2 primary validation.</p>
+            <div class="reg">Regulatory: CE mark under EU MDR <span class="ok">in place ✓</span> — decision rests on commercial &amp; reimbursement fit (<span id="cc-fund">DRG / NUB / OPS</span>).</div>
+          </div>
+          <div class="card donutcard"><div id="cc-donut"></div><div class="cap">Stage-adjusted go probability, weighted by evidence gathered so far</div></div>
+          <div class="card prizecard">
+            <div class="plabel">Size of prize <span class="est">est</span></div>
+            <div class="pnum" id="cc-prize">€13–17M</div>
+            <div class="psub">reachable revenue by year 3</div>
+            <div class="gaugebar"><span id="cc-gauge" style="width:60%"></span></div>
+            <div class="psub" style="margin-top:8px">of <span id="cc-market2">€210M</span> serviceable market <span class="est">est</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sectitle">Engagement progress <span class="tag">live</span></div>
+          <div class="tracker">
+            <div class="tstep done"><div class="tc">✓</div><div class="tl">Market Landscape</div><div class="tp">100%</div></div>
+            <div class="tstep done"><div class="tc">✓</div><div class="tl">Competitor Intel</div><div class="tp">85%</div></div>
+            <div class="tstep active"><div class="tc">◑</div><div class="tl">Voice of Customer</div><div class="tp">40% · in field</div></div>
+            <div class="tstep"><div class="tc">4</div><div class="tl">Synthesis</div><div class="tp">pending</div></div>
+            <div class="tstep"><div class="tc">5</div><div class="tl">GTM &amp; decision</div><div class="tp">pending</div></div>
+          </div>
+        </div>
+        <div class="sectitle">Highlights from every module</div>
+        <div class="grid g4">
+          <div class="hl-card" onclick="show('market')"><div class="ht">Market</div><div class="hv" id="hl-market">€210M · 13% CAGR</div><div class="hd">Ortho robotics; recurring revenue ~68%</div></div>
+          <div class="hl-card" onclick="showSub('comp','comp-product')"><div class="ht">Competitor</div><div class="hv" id="hl-comp">Mako ~55%</div><div class="hd">After-sales service &amp; TAT are the gaps</div></div>
+          <div class="hl-card" onclick="showSub('voc','voc-qual')"><div class="ht">Voice of customer</div><div class="hv">Major gap: after-sales</div><div class="hd">Biomed satisfaction low; switch-willing</div></div>
+          <div class="hl-card" onclick="show('matrix')"><div class="ht">Priority</div><div class="hv">Mid-tier knee</div><div class="hd">Top-ranked; service-led wedge winnable</div></div>
+        </div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card editor-only">
+            <div class="sectitle">What needs your sign-off <span class="tag">3 pending</span></div>
+            <div class="actrow"><div class="ai" style="background:var(--red-soft);color:var(--red)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><div class="ttl">Approve Gate 1 viability memo</div><div class="ds">Required before primary field launch.</div></div><button class="st due" onclick="approveItem(this,'Approved')">Due today</button></div>
+            <div class="actrow"><div class="ai" style="background:var(--amber-bg);color:var(--amber)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 21h16"/></svg></div><div><div class="ttl">Validate pricing assumptions</div><div class="ds">Before the reimbursement model locks.</div></div><button class="st triage" onclick="approveItem(this,'Validated')">Review</button></div>
+            <div class="actrow"><div class="ai" style="background:var(--blue-bg);color:var(--blue)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></div><div><div class="ttl">Sign off primary research scope</div><div class="ds">Respondent quotas &amp; guides staged.</div></div><button class="st info" onclick="approveItem(this,'Signed off')">Draft</button></div>
+          </div>
+          <div class="card">
+            <div class="sectitle">Top opportunities <span class="tag">ranked · est</span></div>
+            <table class="tbl"><thead><tr><th>Opportunity</th><th>Score</th><th>Call</th></tr></thead><tbody>
+              <tr><td class="co">Mid-tier knee accounts</td><td>7.9</td><td><span class="pillmini p-lead">Do now</span></td></tr>
+              <tr><td class="co">Service-led wedge</td><td>7.3</td><td><span class="pillmini p-str">Winnable</span></td></tr>
+              <tr><td class="co">University hospitals</td><td>6.2</td><td><span class="pillmini p-mid">Plan</span></td></tr>
+              <tr><td class="co">Tier-2 stand-alone hospitals</td><td>4.9</td><td><span class="pillmini p-gap">Low priority</span></td></tr>
+            </tbody></table>
+            <div style="margin-top:10px;font-size:12px"><a href="#" onclick="show('matrix');return false;">Open ranking &amp; prioritisation grids →</a></div>
+          </div>
+        </div>
+        <div class="footer-note">Figures marked <span class="est">est</span> are directional placeholders for structuring the assessment. Replace with validated data before any client decision.</div>
+      </section>
+
+      <!-- ===== MARKET LANDSCAPE ===== -->
+      <section class="view" id="v-market">
+        <div class="vhead"><div class="eb">Evidence base</div><h2>Market Landscape — <span class="cty">Germany</span></h2><p>Drivers, regulatory frame, decision makers, customer mix, sizing and forecast. All figures directional and overwritable.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b> · funding via <span id="mk-fund">DRG / NUB / OPS</span></div>
+        <div class="sectitle">Market size &amp; forecast <span class="tag">sub-element · est</span></div>
+        <div class="grid g4">
+          <div class="card kpi"><div class="lbl">Robotic ortho procedures/yr</div><div class="num" id="mk-proc">~20k</div><div class="delta n">knee + hip</div></div>
+          <div class="card kpi"><div class="lbl">Installed robot base</div><div class="num" id="mk-base">~140</div><div class="delta n">systems</div></div>
+          <div class="card kpi"><div class="lbl">Robotic penetration</div><div class="num red" id="mk-pen">~11%</div><div class="delta">▲ of eligible</div></div>
+          <div class="card kpi"><div class="lbl">Serviceable market</div><div class="num" id="mk-market">€210M</div><div class="delta n">all revenue lines</div></div>
+        </div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Installed base forecast 2025–2030 <span class="est">est</span></div><div id="mk-forecast"></div></div>
+          <div class="card"><div class="mini-h">Competitor share of installed base <span class="est">est</span></div><div id="mk-shares"></div></div>
+        </div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Tailwinds</div>
+            <div class="theme">Ageing population lifting knee/hip volumes</div>
+            <div class="theme">Surgeon demand for alignment reproducibility &amp; data</div>
+            <div class="theme">Hospital consolidation concentrating buying power</div>
+            <div class="theme">Robotic penetration still low vs. runway</div>
+          </div>
+          <div class="card"><div class="mini-h">Headwinds</div>
+            <div class="theme">Capital budgets tight under DRG pressure</div>
+            <div class="theme">No dedicated robotic reimbursement uplift</div>
+            <div class="theme">Deep incumbent lock-in via implant pull-through</div>
+            <div class="theme">Long procurement and evaluation cycles</div>
+          </div>
+        </div>
+        <div class="grid g3" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Regulatory &amp; access</div><div class="theme">CE mark under EU MDR — in place</div><div class="theme">Funding via <span id="mk-fund2">DRG</span>, NUB for new methods</div><div class="theme">OPS coding underpins claims</div></div>
+          <div class="card"><div class="mini-h">Key decision makers</div><div class="theme">Ortho surgeons — clinical champion</div><div class="theme">Biomed heads — technical gate</div><div class="theme">Procurement / C-suite — capital sign-off</div></div>
+          <div class="card"><div class="mini-h">Customer type split <span class="est">est</span></div>
+            <div style="font-size:12px;margin-top:4px">University hospitals <b>22%</b><div class="bar"><span style="width:22%"></span></div></div>
+            <div style="font-size:12px;margin-top:8px">Regional chains <b>38%</b><div class="bar"><span class="r" style="width:38%"></span></div></div>
+            <div style="font-size:12px;margin-top:8px">Mid-tier / independent <b>40%</b><div class="bar"><span style="width:40%"></span></div></div>
+          </div>
+        </div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Key customers to target</div>
+            <div class="theme">High-volume mid-tier knee/hip centres <span class="src">low lock-in</span></div>
+            <div class="theme">Regional hospital groups <span class="src">reference value</span></div>
+            <div class="theme">Ambulatory surgical centres <span class="src">emerging</span></div>
+          </div>
+          <div class="card"><div class="mini-h">Key competitors</div>
+            <div class="theme">Stryker (Mako), Zimmer Biomet (ROSA), DePuy Synthes (VELYS) <span class="src">global</span></div>
+            <div class="theme">Smith+Nephew (CORI) <span class="src">challenger</span></div>
+            <div class="theme">B. Braun / Aesculap <span class="src">local · DE</span></div>
+          </div>
+        </div>
+        <div class="footer-note">Directional estimates for structuring only. Replace with validated market data at Gate 1.</div>
+      </section>
+
+      <!-- ===== COMPETITOR PRODUCT ===== -->
+      <section class="view" id="v-comp-product">
+        <div class="vhead"><div class="eb">Competitor Landscape</div><h2>Product Strategy</h2><p>Comparative capability benchmarking across accuracy, technology, after-sales service, ease of use, training and clinical evidence.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="provbar">
+          <span class="pv-src"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg> Primary source · 20 KOLs + 150 survey</span>
+          <span><span class="pv-pct">84%</span> discussed product &amp; feature differences <span class="aibadge ai-agent">agent</span></span>
+          <span class="pv-q">"Accuracy is table stakes now — where platforms really differ is service and how fast they get you back up." — Ortho surgeon (illustrative)</span>
+        </div>
+        <div class="card"><div class="mini-h">Capability benchmark — scored 0–5 <span class="est">est</span> &nbsp;<span class="aibadge ai-accel">AI-scored · QC'd</span></div>
+          <div id="pr-bench"></div>
+          <div class="legend" style="justify-content:center;margin-top:10px"><span><i style="background:var(--purple)"></i>Stryker · Mako</span><span><i style="background:var(--lav)"></i>DePuy · VELYS</span><span><i style="background:var(--red)"></i>Entrant (client)</span></div>
+          <p style="font-size:12px;color:var(--muted);margin-top:6px;text-align:center">The entrant matches on after-sales service and ease of use while trailing on clinical evidence — consistent with the service-led differentiation hypothesis.</p>
+        </div>
+        <div class="card" style="margin-top:16px"><div class="mini-h">Full feature heat map — all four platforms <span class="est">est</span></div>
+          <div class="heat" id="pr-heat" style="grid-template-columns:1.9fr repeat(4,1fr)"></div>
+          <div class="legend"><span><i class="hs1" style="border-radius:3px"></i>Weak</span><span><i class="hs3"></i>Parity</span><span><i class="hs5"></i>Strong</span><span><i style="box-shadow:inset 0 0 0 2px var(--purple);background:#fff"></i>Entrant highlighted</span></div>
+        </div>
+        <div class="grid g3" style="margin-top:16px">
+          <div class="card"><div class="mini-h">USPs — how each is framed</div><div class="theme">Mako: full ecosystem + evidence <span class="src">leader</span></div><div class="theme">ROSA: versatile, multi-app <span class="src">flex</span></div><div class="theme">VELYS: imageless, fast setup <span class="src">lean</span></div></div>
+          <div class="card"><div class="mini-h">Technology posture</div><div class="theme">CT-based vs. imageless split</div><div class="theme">Analytics/AI roadmaps diverging</div><div class="theme">Openness to third-party implants varies</div></div>
+          <div class="card"><div class="mini-h">Entrant opening</div><div class="theme">Service &amp; uptime as the wedge <span class="src">test</span></div><div class="theme">Lower training burden <span class="src">test</span></div><div class="theme">Transparent data/AI roadmap <span class="src">test</span></div></div>
+        </div>
+        <div class="footer-note">Scores illustrative. Validate at Gate 2 with primary evidence.</div>
+      </section>
+
+      <!-- ===== COMPETITOR PRICING ===== -->
+      <section class="view" id="v-comp-pricing">
+        <div class="vhead"><div class="eb">Competitor Landscape</div><h2>Pricing Strategy</h2><p>Pricing, bundling, after-sales, willingness-to-pay and the price-versus-quality perceptual map.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="provbar">
+          <span class="pv-src"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg> Primary source · procurement &amp; biomed</span>
+          <span><span class="pv-pct">76%</span> raised pricing, bundling or after-sales cost <span class="aibadge ai-agent">agent</span></span>
+          <span class="pv-q">"The sticker price isn't the problem — it's the cost of downtime and the bundle you're locked into." — Procurement head (illustrative)</span>
+        </div>
+        <div class="grid g2">
+          <div class="card"><div class="mini-h">Pricing &amp; bundling comparison <span class="est">est</span></div>
+            <table class="tbl"><thead><tr><th>Line</th><th>Mako</th><th>ROSA</th><th>VELYS</th><th>Entrant</th></tr></thead><tbody>
+              <tr><td class="co">Capital (€M)</td><td>1.0–1.2</td><td>0.9–1.1</td><td>0.8–1.0</td><td>0.7–0.9 / aaS</td></tr>
+              <tr><td class="co">Consumables/case</td><td>€900–1,100</td><td>€800–1,000</td><td>€700–950</td><td>Unbundled</td></tr>
+              <tr><td class="co">Service/yr</td><td>€80–90k</td><td>€65–80k</td><td>€60–75k</td><td>SLA-based</td></tr>
+              <tr><td class="co">Bundling</td><td>Tight implant lock-in</td><td>Implant pull-through</td><td>Moderate</td><td>Flexible</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card"><div class="mini-h">Price vs. perceived quality — perceptual map</div>
+            <div class="pmap">
+              <span class="ax axx">Price →</span><span class="ax axy">Perceived quality →</span>
+              <span class="ql tl">Value leaders</span><span class="ql tr">Premium</span><span class="ql bl">Budget</span><span class="ql br">Over-priced</span>
+              <div class="qbg"></div><div class="gh"></div><div class="gv"></div>
+              <div class="pt" style="left:82%;top:16%"><div class="d" style="width:30px;height:30px"></div><div class="pl">Mako</div></div>
+              <div class="pt" style="left:58%;top:44%"><div class="d" style="width:26px;height:26px"></div><div class="pl">ROSA</div></div>
+              <div class="pt" style="left:44%;top:34%"><div class="d" style="width:24px;height:24px"></div><div class="pl">VELYS</div></div>
+              <div class="pt red" style="left:30%;top:24%"><div class="d" style="width:28px;height:28px"></div><div class="pl">Entrant</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="grid g3" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Willingness to pay <span class="est">est</span></div><div class="senti"><span class="s s-mid">Moderate</span></div><p style="font-size:12px;margin-top:8px;color:var(--muted)">Buyers pay premium only where throughput and uptime are provably better; list price alone does not move decisions.</p></div>
+          <div class="card"><div class="mini-h">Price propensity vs. quality</div><div class="theme">Mid-tier: cost-led, price-sensitive</div><div class="theme">University: quality/evidence-led</div><div class="theme">Chains: negotiated, volume-led</div></div>
+          <div class="card"><div class="mini-h">Competitor price perception</div><div class="theme">Mako seen as expensive but safe</div><div class="theme">VELYS seen as value entry</div><div class="theme">After-sales cost opacity a frustration</div></div>
+        </div>
+        <div class="footer-note">Pricing bands are directional placeholders. Confirm via primary procurement interviews.</div>
+      </section>
+
+      <!-- ===== COMPETITOR PROMO ===== -->
+      <section class="view" id="v-comp-promo">
+        <div class="vhead"><div class="eb">Competitor Landscape</div><h2>Promotional Strategy</h2><p>HCP engagement, hospital tie-ups, events, digital campaigns and sponsorship — where share of voice is won.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="provbar">
+          <span class="pv-src"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg> Primary source · surgeons &amp; KOLs</span>
+          <span><span class="pv-pct">61%</span> referenced training academies, congresses or peer engagement <span class="aibadge ai-agent">agent</span></span>
+          <span class="pv-q">"Everyone shows up at DKOU — what earns loyalty is the proctoring and support afterwards." — KOL surgeon (illustrative)</span>
+        </div>
+        <div class="grid g2">
+          <div class="card"><div class="mini-h">Promotional channel intensity <span class="est">est</span></div>
+            <div class="heat" id="promo-heat" style="grid-template-columns:1.6fr repeat(3,1fr)"></div>
+            <div class="legend"><span><i class="hs1"></i>Low</span><span><i class="hs3"></i>Moderate</span><span><i class="hs5"></i>High</span></div>
+          </div>
+          <div class="card"><div class="mini-h">Share of voice — key congresses <span class="est">est</span></div>
+            <div style="font-size:12px;margin-bottom:10px">Stryker · Mako <b>44%</b><div class="bar"><span style="width:44%"></span></div></div>
+            <div style="font-size:12px;margin-bottom:10px">Zimmer · ROSA <b>26%</b><div class="bar"><span style="width:26%;background:var(--lav)"></span></div></div>
+            <div style="font-size:12px;margin-bottom:10px">DePuy · VELYS <b>18%</b><div class="bar"><span style="width:18%;background:var(--lav-l)"></span></div></div>
+            <div style="font-size:12px">Others / entrant <b>12%</b><div class="bar"><span class="r" style="width:12%"></span></div></div>
+          </div>
+        </div>
+        <div class="grid g3" style="margin-top:16px">
+          <div class="card"><div class="mini-h">HCP engagement &amp; tie-ups</div><div class="theme">Surgeon training academies &amp; proctoring</div><div class="theme">Reference-site partnerships at universities</div><div class="theme">Fellowship and preceptorship programmes</div></div>
+          <div class="card"><div class="mini-h">Events &amp; congresses</div><div class="theme">DKOU (German ortho congress) — flagship</div><div class="theme">EFORT — European reach</div><div class="theme">Regional cadaver &amp; wet-lab workshops</div></div>
+          <div class="card"><div class="mini-h">Digital &amp; sponsorship</div><div class="theme">LinkedIn clinical-outcome campaigns</div><div class="theme">Peer-reviewed evidence pushes</div><div class="theme">Limited patient-forum sponsorship <span class="src">gap</span></div></div>
+        </div>
+        <div class="footer-note">Intensities illustrative. Validate against monitored competitor activity.</div>
+      </section>
+
+      <!-- ===== COMPETITOR CHANNEL ===== -->
+      <section class="view" id="v-comp-channel">
+        <div class="vhead"><div class="eb">Competitor Landscape</div><h2>Channel Strategy</h2><p>Distribution model, import origin, service turnaround and after-sales satisfaction — the operational moat.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="provbar">
+          <span class="pv-src"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg> Primary source · biomed engineers &amp; heads</span>
+          <span><span class="pv-pct">79%</span> raised service turnaround or after-sales support <span class="aibadge ai-agent">agent</span></span>
+          <span class="pv-q">"When it goes down, 48 hours is a lost operating week. Response time is the whole relationship." — Biomedical head (illustrative)</span>
+        </div>
+        <div class="grid g2">
+          <div class="card"><div class="mini-h">Distribution &amp; sourcing <span class="est">est</span></div>
+            <table class="tbl"><thead><tr><th>Player</th><th>Go-to-market</th><th>Origin</th></tr></thead><tbody>
+              <tr><td class="co">Stryker · Mako</td><td>Direct sales force</td><td>US import + EU ops</td></tr>
+              <tr><td class="co">Zimmer · ROSA</td><td>Direct + specialist distributors</td><td>US / EU import</td></tr>
+              <tr><td class="co">DePuy · VELYS</td><td>Direct (J&amp;J MedTech)</td><td>US / EU import</td></tr>
+              <tr><td class="co">Entrant</td><td>Hybrid: direct mid-tier + distributor tail</td><td>Import + local service hub</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card"><div class="mini-h">Service turnaround (TAT) on breakdown <span class="est">est</span></div>
+            <div style="font-size:12px;margin-bottom:10px">Mako <b>~24–48h</b><div class="bar"><span style="width:40%"></span></div></div>
+            <div style="font-size:12px;margin-bottom:10px">ROSA <b>~48–72h</b><div class="bar"><span style="width:62%;background:var(--amber)"></span></div></div>
+            <div style="font-size:12px;margin-bottom:10px">VELYS <b>~48–72h</b><div class="bar"><span style="width:64%;background:var(--amber)"></span></div></div>
+            <div style="font-size:12px">Entrant target <b>&lt;24h SLA</b><div class="bar"><span class="r" style="width:26%"></span></div></div>
+            <p style="font-size:11.5px;color:var(--muted);margin-top:10px">Shorter bar = better. Uptime guarantee is the entrant's operational wedge.</p>
+          </div>
+        </div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><div class="mini-h">After-sales satisfaction <span class="est">est</span></div>
+            <div style="font-size:12px;margin-bottom:10px">Mako <b>7.2/10</b><div class="bar"><span style="width:72%;background:var(--green)"></span></div></div>
+            <div style="font-size:12px;margin-bottom:10px">ROSA <b>5.6/10</b><div class="bar"><span style="width:56%;background:var(--amber)"></span></div></div>
+            <div style="font-size:12px">VELYS <b>5.9/10</b><div class="bar"><span style="width:59%;background:var(--amber)"></span></div></div>
+          </div>
+          <div class="card"><div class="mini-h">Channel implication</div>
+            <ul class="gtm-list"><li>Incumbents lean on direct force + implant lock-in</li><li>Mid-tier under-served on service response</li><li>A local service hub with &lt;24h SLA is a credible differentiator</li><li>Distributor tail extends reach without fixed cost</li></ul>
+          </div>
+        </div>
+        <div class="footer-note">TAT and satisfaction figures illustrative. Confirm via biomed and procurement interviews.</div>
+      </section>
+
+      <!-- ===== VOC METHOD ===== -->
+      <section class="view" id="v-voc-method">
+        <div class="vhead"><div class="eb">Voice of Customers</div><h2>Approach &amp; Screening</h2><p>How the primary programme is designed and run. 20 in-depth interviews and a 150-respondent survey.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b> · fielding in progress</div>
+        <div class="grid g4">
+          <div class="card kpi"><div class="lbl">Qual interviews (KOLs)</div><div class="num">20</div><div class="delta n">target sample</div></div>
+          <div class="card kpi"><div class="lbl">Quant survey</div><div class="num">150</div><div class="delta n">respondents</div></div>
+          <div class="card kpi"><div class="lbl">Stakeholder types</div><div class="num red">5</div><div class="delta n">clinical→economic→inside</div></div>
+          <div class="card kpi"><div class="lbl">Fielding status</div><div class="num">40%</div><div class="delta">▲ 8 of 20 complete</div></div>
+        </div>
+        <div class="sectitle">Research process</div>
+        <div class="steps">
+          <div class="step"><div class="no">1</div><h4>Screening</h4><p>Multi-OEM exposure, 8+ years, decision influence.</p><span class="aibadge ai-agent">agent</span></div>
+          <div class="step"><div class="no">2</div><h4>Questionnaire design</h4><p>Guides &amp; survey built gap-by-gap.</p><span class="aibadge ai-gen">GenAI</span></div>
+          <div class="step"><div class="no">3</div><h4>Interview process</h4><p>45–60 min depth interviews; recorded, consented.</p><span class="aibadge ai-human">consultant</span></div>
+          <div class="step"><div class="no">4</div><h4>Data processing</h4><p>Transcription, coding, cleaning, triangulation.</p><span class="aibadge ai-agent">agent</span></div>
+          <div class="step"><div class="no">5</div><h4>Insights generation</h4><p>Themes, need-gaps, scored opportunities.</p><span class="aibadge ai-gen">GenAI</span></div>
+        </div>
+        <div class="ainote"><b>Human-in-lead, AI-enabled.</b> Every AI-assisted step is quality-checked by a consultant. Interviews and final recommendations are fully human-led.</div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Screening criteria for KOLs</div>
+            <div class="theme">Exposure to multiple OEM platforms (multi-OEM)</div>
+            <div class="theme">8+ years of relevant clinical / technical experience</div>
+            <div class="theme">Direct role in evaluation or purchase decisions</div>
+            <div class="theme">Mix of university, chain and mid-tier settings</div>
+            <div class="theme">Ex-employees: recently departed, compliance-screened</div>
+          </div>
+          <div class="card"><div class="mini-h">Respondent mix</div>
+            <table class="tbl"><thead><tr><th>Stakeholder</th><th>Qual</th><th>Quant</th></tr></thead><tbody>
+              <tr><td class="co">Ortho surgeons / HCPs</td><td>8</td><td>70</td></tr>
+              <tr><td class="co">Biomed engineers</td><td>4</td><td>35</td></tr>
+              <tr><td class="co">Biomed heads</td><td>3</td><td>20</td></tr>
+              <tr><td class="co">Procurement heads</td><td>3</td><td>25</td></tr>
+              <tr><td class="co">Ex-competitor employees</td><td>2</td><td>—</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px"><div class="mini-h">Compliance &amp; data protection</div>
+          <p style="font-size:12.5px;color:var(--gray)">All primary research is conducted in accordance with <b>GDPR</b> and <b>ESOMAR</b> guidelines. Personal data is pseudonymised, stored on secured infrastructure with role-based access, and reported only on an aggregated basis.</p>
+        </div>
+        <div class="footer-note">Sample plan illustrative. Final quotas confirmed at scope sign-off.</div>
+      </section>
+
+      <!-- ===== VOC QUAL ===== -->
+      <section class="view" id="v-voc-qual">
+        <div class="vhead"><div class="eb">Voice of Customers · Qualitative</div><h2>Qualitative Insights — 20 KOLs</h2><p>Depth-interview status, sentiment by stakeholder and emerging themes. Quotes illustrative pending completion.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="card"><div class="mini-h">Interview completion</div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span>8 of 20 complete</span><b>40%</b></div>
+          <div class="progress-lg"><span style="width:40%;background:linear-gradient(90deg,var(--red),var(--purple))"></span></div>
+        </div>
+        <div class="grid g4" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Surgeons / HCPs</div><div class="senti"><span class="s s-mid">6.4</span><span class="o">/10 <span class="est">est</span></span></div><div class="theme" style="margin-top:8px">Value data; question capital cost</div></div>
+          <div class="card"><div class="mini-h">Biomed engineers</div><div class="senti"><span class="s s-neg">5.1</span><span class="o">/10 <span class="est">est</span></span></div><div class="theme" style="margin-top:8px">Service response top pain</div></div>
+          <div class="card"><div class="mini-h">Procurement</div><div class="senti"><span class="s s-mid">6.0</span><span class="o">/10 <span class="est">est</span></span></div><div class="theme" style="margin-top:8px">Capex the primary barrier</div></div>
+          <div class="card"><div class="mini-h">Ex-competitor</div><div class="senti"><span class="s s-pos">Inside</span></div><div class="theme" style="margin-top:8px">Mid-tier deprioritised internally</div></div>
+        </div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Emerging themes</div>
+            <div class="theme">Service &amp; uptime consistently below expectation <span class="src">all</span></div>
+            <div class="theme">Capital barrier blocks mid-tier adoption <span class="src">procurement</span></div>
+            <div class="theme">Total-cost visibility poor across incumbents <span class="src">biomed</span></div>
+            <div class="theme">Openness to switch if service improves <span class="src">surgeons</span></div>
+          </div>
+          <div class="card"><div class="mini-h">Illustrative voice</div>
+            <div class="quote">Uptime is everything — a robot that's down on a Monday list costs us more than the price difference.<span class="qa">— Biomed head, regional chain (illustrative)</span></div>
+            <div class="quote">If someone made the capital problem go away, we'd genuinely trial an alternative.<span class="qa">— Procurement lead, mid-tier hospital (illustrative)</span></div>
+          </div>
+        </div>
+        <div class="footer-note">Sentiment and quotes are illustrative placeholders until fielding completes.</div>
+      </section>
+
+      <!-- ===== VOC QUANT ===== -->
+      <section class="view" id="v-voc-quant">
+        <div class="vhead"><div class="eb">Voice of Customers · Quantitative</div><h2>Quantitative Insights — 150 Survey</h2><p>Survey fielding status and the numbers that size sentiment and switching.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="card"><div class="mini-h">Survey completion</div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span>96 of 150 responses</span><b>64%</b></div>
+          <div class="progress-lg"><span style="width:64%;background:linear-gradient(90deg,var(--red),var(--purple))"></span></div>
+        </div>
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Satisfaction with current platform <span class="est">est</span></div>
+            <div style="font-size:12px;margin-bottom:10px">Surgeons <b>6.4</b><div class="bar"><span style="width:64%;background:var(--green)"></span></div></div>
+            <div style="font-size:12px;margin-bottom:10px">Biomed <b>5.1</b><div class="bar"><span style="width:51%;background:var(--amber)"></span></div></div>
+            <div style="font-size:12px;margin-bottom:10px">Procurement <b>6.0</b><div class="bar"><span style="width:60%;background:var(--amber)"></span></div></div>
+            <div style="font-size:12px">Overall <b>5.9</b><div class="bar"><span class="r" style="width:59%"></span></div></div>
+          </div>
+          <div class="card"><div class="mini-h">Willingness to switch if service improves <span class="est">est</span></div>
+            <div class="chartrow"><div id="q-donut"></div>
+              <p style="font-size:12px;color:var(--muted)">A majority would consider switching platforms if service, uptime and total cost improved — the core of the entry thesis.</p></div>
+          </div>
+        </div>
+        <div class="grid g3" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Top purchase driver <span class="est">est</span></div>
+            <div style="font-size:12px;margin-bottom:8px">Service &amp; uptime <b>31%</b><div class="bar"><span class="r" style="width:31%"></span></div></div>
+            <div style="font-size:12px;margin-bottom:8px">Clinical outcomes <b>27%</b><div class="bar"><span style="width:27%"></span></div></div>
+            <div style="font-size:12px;margin-bottom:8px">Total cost <b>24%</b><div class="bar"><span style="width:24%"></span></div></div>
+            <div style="font-size:12px">Brand / evidence <b>18%</b><div class="bar"><span style="width:18%"></span></div></div>
+          </div>
+          <div class="card"><div class="mini-h">Openness to as-a-service <span class="est">est</span></div><div class="senti"><span class="s s-pos">61%</span><span class="o">favourable</span></div><p style="font-size:12px;margin-top:8px;color:var(--muted)">Strongest among mid-tier and independents where capex is the barrier.</p></div>
+          <div class="card"><div class="mini-h">Net sentiment vs. incumbents <span class="est">est</span></div><div class="senti"><span class="s s-mid">Neutral–</span></div><p style="font-size:12px;margin-top:8px;color:var(--muted)">Loyalty is habitual, not enthusiastic — a switching opening exists.</p></div>
+        </div>
+        <div class="footer-note">All survey figures illustrative until fielding closes at 150.</div>
+      </section>
+
+      <!-- ===== OPPORTUNITY MATRIX ===== -->
+      <section class="view" id="v-matrix">
+        <div class="vhead"><div class="eb">Decision &amp; output</div><h2>Opportunity Matrix — <span class="cty">Germany</span></h2><p>From raw signal to a ranked, prioritised opportunity set.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="card"><div class="mini-h">Synthesis flow</div>
+          <div class="funnel">
+            <div class="fnode"><div class="fn">380+</div><div class="ft">Signals</div><div class="fd">Qual + quant + secondary</div><span class="aibadge ai-agent">agent</span></div>
+            <div class="farrow">→</div>
+            <div class="fnode"><div class="fn">14</div><div class="ft">Themes</div><div class="fd">Thematic analysis</div><span class="aibadge ai-gen">GenAI</span></div>
+            <div class="farrow">→</div>
+            <div class="fnode"><div class="fn">6</div><div class="ft">Opportunity buckets</div><div class="fd">Clustered by segment/use</div><span class="aibadge ai-accel">accel</span></div>
+            <div class="farrow">→</div>
+            <div class="fnode"><div class="fn">4</div><div class="ft">Prioritised</div><div class="fd">Scored &amp; ranked</div><span class="aibadge ai-accel">accel</span> <span class="aibadge ai-human">QC</span></div>
+          </div>
+        </div>
+        <div class="sectitle">Ranking grid — weighted scoring <span class="tag">est</span></div>
+        <div class="card">
+          <table class="tbl"><thead><tr><th>#</th><th>Opportunity</th><th>Attractiveness<br><small>30%</small></th><th>Ability to win<br><small>30%</small></th><th>Strategic fit<br><small>20%</small></th><th>Speed to revenue<br><small>20%</small></th><th>Weighted</th><th>Call</th></tr></thead><tbody>
+            <tr class="rankrow"><td><span class="rank-badge">1</span></td><td class="co">Mid-tier knee accounts</td><td>8.2</td><td>7.6</td><td>8.0</td><td>7.5</td><td><div class="scorebar"><b>7.9</b><div class="bar"><span style="width:79%"></span></div></div></td><td><span class="pillmini p-lead">Do now</span></td></tr>
+            <tr class="rankrow"><td><span class="rank-badge">2</span></td><td class="co">Service-led wedge</td><td>6.1</td><td>8.4</td><td>7.8</td><td>7.0</td><td><div class="scorebar"><b>7.3</b><div class="bar"><span style="width:73%"></span></div></div></td><td><span class="pillmini p-str">Winnable</span></td></tr>
+            <tr class="rankrow"><td><span class="rank-badge">3</span></td><td class="co">University hospitals</td><td>7.8</td><td>4.9</td><td>6.5</td><td>4.5</td><td><div class="scorebar"><b>6.0</b><div class="bar"><span style="width:60%"></span></div></div></td><td><span class="pillmini p-mid">Plan</span></td></tr>
+            <tr class="rankrow"><td><span class="rank-badge">4</span></td><td class="co">Tier-2 stand-alone hospitals</td><td>4.7</td><td>5.2</td><td>4.5</td><td>4.0</td><td><div class="scorebar"><b>4.7</b><div class="bar"><span class="r" style="width:47%"></span></div></div></td><td><span class="pillmini p-gap">Low priority</span></td></tr>
+          </tbody></table>
+        </div>
+        <div class="sectitle">Prioritisation grid</div>
+        <div class="grid g2">
+          <div class="card"><div class="mini-h">Attractiveness × ability to win <span class="est">bubble = size of prize</span></div>
+            <div class="pmap">
+              <span class="ax axx">Market attractiveness →</span><span class="ax axy">Ability to win →</span>
+              <span class="ql tl">Build capability</span><span class="ql tr">Do now</span><span class="ql bl">Park</span><span class="ql br">Selective</span>
+              <div class="qbg"></div><div class="gh"></div><div class="gv"></div>
+              <div class="pt red" style="left:80%;top:22%"><div class="d" style="width:46px;height:46px"></div><div class="pl">Mid-tier knee</div></div>
+              <div class="pt" style="left:32%;top:16%"><div class="d" style="width:30px;height:30px"></div><div class="pl">Service wedge</div></div>
+              <div class="pt" style="left:74%;top:64%"><div class="d" style="width:36px;height:36px"></div><div class="pl">University</div></div>
+              <div class="pt" style="left:34%;top:70%"><div class="d" style="width:22px;height:22px"></div><div class="pl">Tier-2 stand-alone</div></div>
+            </div>
+          </div>
+          <div class="card"><div class="mini-h">Action bucketing</div>
+            <table class="tbl"><thead><tr><th>Bucket</th><th>Opportunity</th><th>Move</th></tr></thead><tbody>
+              <tr><td><span class="pillmini p-lead">Do now</span></td><td class="co">Mid-tier knee</td><td>Anchor entry; direct team</td></tr>
+              <tr><td><span class="pillmini p-str">Winnable</span></td><td class="co">Service wedge</td><td>Bundle into every deal</td></tr>
+              <tr><td><span class="pillmini p-mid">Plan</span></td><td class="co">University</td><td>Phase two; build references</td></tr>
+              <tr><td><span class="pillmini p-gap">Low priority</span></td><td class="co">Tier-2 stand-alone</td><td>Revisit post-entry</td></tr>
+            </tbody></table>
+            <p style="font-size:11.5px;color:var(--muted);margin-top:12px">Mid-tier knee combines high attractiveness, winnability and prize — the clear anchor.</p>
+          </div>
+        </div>
+        <div class="footer-note">Scores, weights and positions are illustrative placeholders. Populated from synthesised evidence at Gate 2.</div>
+      </section>
+
+      <!-- ===== GTM ===== -->
+      <section class="view" id="v-gtm">
+        <div class="vhead"><div class="eb">Decision &amp; output</div><h2>GTM Playbook — <span class="cty">Germany</span></h2><p>The entry decision and the recommendations.</p></div>
+        <div class="ctx-banner">Market context: <b class="cty">Germany</b></div>
+        <div class="grid g2">
+          <div class="gtm-rec"><div class="t">Recommended entry model</div><h3>Hybrid: direct in mid-tier, distributor-assisted elsewhere</h3><p>Own the mid-tier accounts where the service wedge wins and margins justify a direct team. Use distributor reach for the long tail and university access while references build.</p></div>
+          <div class="card"><div class="mini-h">Commercial &amp; pricing architecture</div><ul class="gtm-list"><li>As-a-service option to remove the capex barrier</li><li>Uptime-guaranteed service SLA as the headline</li><li>Transparent, unbundled consumables pricing</li><li>NUB support playbook offered per account</li></ul></div>
+        </div>
+        <div class="grid g3" style="margin-top:16px">
+          <div class="card"><div class="mini-h">Target-account sequence</div><ul class="gtm-list"><li>Wave 1 — mid-tier knee-heavy, low lock-in</li><li>Wave 2 — regional chains, reference-led</li><li>Wave 3 — university hospitals once evidence exists</li></ul></div>
+          <div class="card"><div class="mini-h">Launch &amp; retention</div><ul class="gtm-list"><li>KOL &amp; clinical-evidence plan from day one</li><li>Service model as the retention engine</li><li>Account-expansion built into first contracts</li></ul></div>
+          <div class="card"><div class="mini-h">Key recommendations</div><ul class="gtm-list"><li>Enter, but service-led and mid-tier first</li><li>Compete on uptime &amp; after-sales, not list price</li><li>Validate pricing &amp; switching at Gate 2 before scale</li></ul></div>
+        </div>
+        <div class="sectitle">Indicative 18-month roadmap</div>
+        <div class="card"><div class="road">
+          <div class="rlane"><div class="rq">Q1–Q2</div><div class="ri">Gate 2 sign-off</div><div class="ri">Local service hub stand-up</div><div class="ri">First 3 lighthouse accounts</div></div>
+          <div class="rlane"><div class="rq">Q3–Q4</div><div class="ri">Wave 1 mid-tier rollout</div><div class="ri">aaS pilots</div><div class="ri">Evidence &amp; KOL programme</div></div>
+          <div class="rlane"><div class="rq">Q5–Q6</div><div class="ri">Regional chain expansion</div><div class="ri">University references</div><div class="ri">Assess adjacent EU markets</div></div>
+        </div></div>
+        <div class="footer-note">Confirm entry model and pricing against Gate 2 findings before commitment.</div>
+      </section>
+
+      <!-- ===== METHODOLOGY ===== -->
+      <section class="view" id="v-methodology">
+        <div class="vhead"><div class="eb">Reference</div><h2>Methodology &amp; Approach</h2><p>How Evalueserve executes this engagement — the insights each respondent yields, vendor onboarding, standards, sample instruments, and where AI accelerates the work.</p></div>
+        <div class="mtabs">
+          <button class="mtab on" data-mtab="insights">Insights by respondent</button>
+          <button class="mtab" data-mtab="vendor">Vendor onboarding</button>
+          <button class="mtab" data-mtab="bp">Primary-research best practices</button>
+          <button class="mtab" data-mtab="quest">Sample questionnaires</button>
+          <button class="mtab" data-mtab="ai">AI enablement</button>
+        </div>
+
+        <div class="mpane active" id="m-insights">
+          <div class="card">
+            <div class="mini-h">Personas · primary interviews &amp; survey</div>
+            <div class="personas">
+              <div class="persona"><div class="pic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><div class="pn">Ortho surgeons / HCPs</div></div>
+              <div class="persona"><div class="pic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v4a4 4 0 0 0 8 0V3"/><path d="M6 21a6 6 0 0 1 12 0"/></svg></div><div class="pn">Biomedical engineers</div></div>
+              <div class="persona"><div class="pic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div><div class="pn">Biomedical heads</div></div>
+              <div class="persona"><div class="pic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div><div class="pn">Procurement heads</div></div>
+              <div class="persona"><div class="pic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M18 8l3-3"/></svg></div><div class="pn">Ex-competitor employees**</div></div>
+            </div>
+            <div class="bandlabel">Primary interviews &amp; survey → Evalueserve analysis</div>
+            <table class="tbl">
+              <thead><tr><th>Respondent</th><th>What they uniquely reveal</th><th>How Evalueserve uses it</th></tr></thead>
+              <tbody>
+                <tr><td class="co">Ortho surgeons / HCPs</td><td>Clinical preference, platform loyalty, switching triggers, training burden</td><td>Position the value proposition around clinical decision drivers</td></tr>
+                <tr><td class="co">Biomedical engineers</td><td>Reliability, downtime, service turnaround, integration pain points</td><td>Validate the service &amp; uptime wedge; define the SLA that wins</td></tr>
+                <tr><td class="co">Biomedical heads</td><td>Fleet strategy, maintenance economics, lifecycle realities</td><td>Shape the service and low-maintenance proposition</td></tr>
+                <tr><td class="co">Procurement heads</td><td>Tender criteria, bundling norms, price-value perception</td><td>Design pricing, bundling and acquisition models to win tenders</td></tr>
+                <tr><td class="co">Ex-competitor employees**</td><td>Retention playbooks, internal priorities, competitive response</td><td>Stress-test differentiation; triangulation only</td></tr>
+              </tbody>
+            </table>
+            <div class="footer-note">**Optional persona, leveraged only for triangulation under strict compliance terms.</div>
+          </div>
+        </div>
+
+        <div class="mpane" id="m-vendor">
+          <div class="vsteps">
+            <div class="card"><div class="step" style="background:none;border:none;padding:0"><div class="no">1</div><h4>Identify reliable partners</h4><p>Maintain and refresh a vetted vendor list with the strongest credentials for this study type.</p></div></div>
+            <div class="card"><div class="step" style="background:none;border:none;padding:0"><div class="no">2</div><h4>Partner on-boarding</h4><p>Sign NDAs, MSAs and DPAs so relationships are legally binding and GDPR-compliant.</p></div></div>
+            <div class="card"><div class="step" style="background:none;border:none;padding:0"><div class="no">3</div><h4>Execution groundwork</h4><p>Detailed briefings and mock interviews so the field team collects the right data.</p></div></div>
+            <div class="card"><div class="step" style="background:none;border:none;padding:0"><div class="no">4</div><h4>Ongoing management</h4><p>Day-to-day status and weekly calls to keep data correct, relevant and on-plan.</p></div></div>
+          </div>
+          <div class="grid g2" style="margin-top:16px">
+            <div class="card"><div class="mini-h">Selection criteria</div>
+              <div class="theme">Market reputation — years in business, client references</div>
+              <div class="theme">Prior experience with Evalueserve on similar studies</div>
+              <div class="theme">Membership of ESOMAR or equivalent governing bodies</div>
+              <div class="theme">Capability — network reach across target geographies</div>
+            </div>
+            <div class="card"><div class="mini-h">Quality controls</div>
+              <div class="theme">Partner does not sub-outsource our work</div>
+              <div class="theme">For online panels: validated respondents, no double opt-ins</div>
+              <div class="theme">Reach and fit against the exact target audience</div>
+              <div class="theme">Confidence in delivering the defined sample and timeline</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpane" id="m-bp">
+          <div class="quad">
+            <div class="qc"><h4><span class="qi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Project process measures</h4><ul>
+              <li>Unbiased instruments; the client's name is never revealed to respondents</li>
+              <li>For CI work, multiple brands are referenced to avoid bias</li>
+              <li>Clean-desk and clear-screen policy; least-privilege access</li>
+              <li>Information barriers ("Chinese walls") and strict staffing rules</li>
+            </ul></div>
+            <div class="qc"><h4><span class="qi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></span>Vendor &amp; KOL onboarding</h4><ul>
+              <li>Trusted third-party vendors with the strongest credentials</li>
+              <li>NDAs signed so sensitive information is never misused</li>
+              <li>Master Service Agreements for transparent, legally-bound relationships</li>
+              <li>KOL screening for genuine, multi-OEM, senior experience</li>
+            </ul></div>
+            <div class="qc"><h4><span class="qi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></span>Data management &amp; analysis</h4><ul>
+              <li>Findings reported on an aggregated basis; individual responses never disclosed</li>
+              <li>Secured data storage and encrypted transmission</li>
+              <li>Access limited to the project / account team only</li>
+              <li>GDPR-compliant retention and deletion</li>
+            </ul></div>
+            <div class="qc"><h4><span class="qi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7Z"/></svg></span>Industry standards</h4><ul>
+              <li>ESOMAR guidelines for ethical, self-regulated research</li>
+              <li>SCIP code of ethics for competitive-intelligence conduct</li>
+              <li>ISO 27001 certification for information security</li>
+              <li>GDPR for personal-data protection</li>
+            </ul></div>
+          </div>
+        </div>
+
+        <div class="mpane" id="m-quest">
+          <div class="grid g2">
+            <div class="qz">
+              <div class="qzh"><h4>Qualitative discussion guide</h4><span class="split">80% open · 20% closed</span></div>
+              <div class="qitem"><span class="qt qt-open">Open</span><span class="qtext">Walk me through how your institution currently evaluates and selects a robotic ortho system.</span></div>
+              <div class="qitem"><span class="qt qt-open">Open</span><span class="qtext">What works well, and what frustrates you, about your current platform's after-sales service and turnaround?</span></div>
+              <div class="qitem"><span class="qt qt-open">Open</span><span class="qtext">How do downtime or breakdowns affect your OR schedule and your view of a vendor?</span></div>
+              <div class="qitem"><span class="qt qt-open">Open</span><span class="qtext">In your view, what would make you seriously consider switching platforms?</span></div>
+              <div class="qitem"><span class="qt qt-open">Open</span><span class="qtext">How is the capital vs. as-a-service decision viewed by your finance and procurement stakeholders?</span></div>
+              <div class="qitem"><span class="qt qt-open">Open</span><span class="qtext">What role do clinical evidence, service and cost each play in the final decision?</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">On a 1–10 scale, how satisfied are you with your current platform's after-sales service?</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Which factor matters most in selection — outcomes, service &amp; uptime, total cost, or brand?</span></div>
+            </div>
+            <div class="qz">
+              <div class="qzh"><h4>Quantitative survey</h4><span class="split">90% closed · 10% open</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Which robotic platform(s) does your institution currently use? (select all)</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Rate satisfaction (1–10) for: accuracy · service turnaround · training · total cost. (matrix)</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">How likely are you to consider switching platforms within 24 months? (1–5)</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Rank these purchase drivers: outcomes · service &amp; uptime · total cost · brand/evidence.</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Preferred acquisition model — capital purchase, as-a-service, or hybrid?</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Maximum acceptable on-site service turnaround — &lt;24h, 24–48h, or &gt;48h?</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">How would you rate each vendor's after-sales support? (1–5 per vendor)</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Openness to an as-a-service model — very / somewhat / neutral / unlikely.</span></div>
+              <div class="qitem"><span class="qt qt-closed">Closed</span><span class="qtext">Institution type — university · regional chain · mid-tier · stand-alone.</span></div>
+              <div class="qitem"><span class="qt qt-open">Open</span><span class="qtext">What single improvement would most increase your satisfaction with your current platform?</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mpane" id="m-ai">
+          <div class="card">
+            <div class="mini-h">Human-in-lead, AI-enabled</div>
+            <p style="font-size:13px;color:var(--gray)">AI is an accelerator, not the decision-maker. Every AI-assisted step is quality-checked by a consultant. Conducting interviews and forming the final recommendations remain fully human-led.</p>
+            <div class="ailegend" style="margin-top:14px">
+              <span class="aibadge ai-gen">GenAI synthesis</span>
+              <span class="aibadge ai-agent">Custom agent</span>
+              <span class="aibadge ai-accel">AI accelerator</span>
+              <span class="aibadge ai-human">Consultant-led / QC</span>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px"><div class="mini-h">Where each tool is applied</div>
+            <table class="tbl">
+              <thead><tr><th>Step</th><th>AI enabler</th><th>Consultant role</th></tr></thead>
+              <tbody>
+                <tr><td class="co">Market &amp; competitor aggregation</td><td><span class="aibadge ai-agent">agent</span></td><td>Validates sources, curates</td></tr>
+                <tr><td class="co">KOL screening &amp; recruitment</td><td><span class="aibadge ai-agent">agent</span></td><td>Approves shortlist</td></tr>
+                <tr><td class="co">Questionnaire &amp; guide design</td><td><span class="aibadge ai-gen">GenAI</span></td><td>Finalises instruments</td></tr>
+                <tr><td class="co">Conducting interviews</td><td><span class="aibadge ai-human">none</span></td><td>Fully human-led</td></tr>
+                <tr><td class="co">Transcription &amp; data processing</td><td><span class="aibadge ai-agent">agent</span> <span class="aibadge ai-accel">accel</span></td><td>QCs coding &amp; cleaning</td></tr>
+                <tr><td class="co">Thematic analysis &amp; scoring</td><td><span class="aibadge ai-gen">GenAI</span> <span class="aibadge ai-accel">accel</span></td><td>Interprets, adjusts weights</td></tr>
+                <tr><td class="co">Final recommendations</td><td><span class="aibadge ai-human">none</span></td><td>Fully human-led</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="footer-note">Methodology summary for client reference. Detailed protocols shared at scope sign-off.</div>
+        </div>
+      </section>
+
+      <!-- ===== FOCUS AREA SCOPED ===== -->
+      <section class="view" id="v-fa-scoped">
+        <div class="scoped">
+          <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+          <h2 id="fa-title">Sports Medicine</h2>
+          <p id="fa-desc">This focus area is scoped for a future phase. The same assessment framework can be stood up here once prioritised. Switch back to <b>Orthopedic Robotics</b> to explore the live workspace.</p>
+        </div>
+      </section>
+
+    </div><!-- /canvas -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+/* ========== SCENE NAVIGATION ========== */
+function go(id){
+  document.querySelectorAll('.scene,#app').forEach(function(s){s.classList.add('hidden');});
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+/* ========== ROLE SELECTION ========== */
+var chosen={role:'admin',mode:'Hub Owner / Editor Mode'};
+document.querySelectorAll('.roleopt').forEach(function(o){
+  function pick(){
+    document.querySelectorAll('.roleopt').forEach(function(x){x.setAttribute('aria-checked','false');});
+    o.setAttribute('aria-checked','true');
+    chosen.role=o.dataset.role;
+    chosen.mode=o.dataset.mode;
+  }
+  o.addEventListener('click',pick);
+  o.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}});
+});
+
+function enterHub(){
+  document.body.className='role-'+chosen.role;
+  document.getElementById('modeBadge').textContent=chosen.mode;
+  go('app');
+  render();
+  drawStatic();
+}
+
+/* ========== BELL / NOTIFICATIONS ========== */
+var bellCount=3;
+function toggleBell(e){
+  e.stopPropagation();
+  document.getElementById('bellPanel').classList.toggle('hidden');
+}
+function markAllRead(){
+  bellCount=0;
+  document.getElementById('bellCnt').textContent='0';
+  document.getElementById('bellCnt').style.display='none';
+  document.getElementById('bellPanel').classList.add('hidden');
+}
+document.addEventListener('click',function(){document.getElementById('bellPanel').classList.add('hidden');});
+document.getElementById('bellPanel').addEventListener('click',function(e){e.stopPropagation();});
+
+/* ========== APPROVE ITEMS ========== */
+function approveItem(btn,label){
+  btn.textContent=label;
+  btn.className='st appr';
+  var row=btn.closest('.actrow');
+  if(row) row.style.opacity='0.5';
+}
+
+/* ========== SEARCH ========== */
+function handleSearch(val){
+  if(!val.trim()) return;
+  var map={'market':'market','competitor':'comp-product','compet':'comp-product','pricing':'comp-pricing','promo':'comp-promo','channel':'comp-channel','voc':'voc-method','qual':'voc-qual','quant':'voc-quant','survey':'voc-quant','matrix':'matrix','opportunit':'matrix','gtm':'gtm','playbook':'gtm','method':'methodology'};
+  var lower=val.toLowerCase();
+  for(var k in map){if(lower.indexOf(k)!==-1){show(map[k]);document.getElementById('searchInput').value='';return;}}
+}
+
+/* ========== VIEW NAVIGATION ========== */
+var labels={
+  cockpit:'Decision Cockpit',market:'Market Landscape',
+  'comp-product':'Competitor · Product Strategy','comp-pricing':'Competitor · Pricing Strategy',
+  'comp-promo':'Competitor · Promotional Strategy','comp-channel':'Competitor · Channel Strategy',
+  'voc-method':'Voice of Customers · Approach','voc-qual':'Voice of Customers · Qualitative',
+  'voc-quant':'Voice of Customers · Quantitative',matrix:'Opportunity Matrix',
+  gtm:'GTM Playbook',methodology:'Methodology & Approach'
+};
+var viewGroup={
+  'comp-product':'comp','comp-pricing':'comp','comp-promo':'comp','comp-channel':'comp',
+  'voc-method':'voc','voc-qual':'voc','voc-quant':'voc'
+};
+
+function setActiveNav(v){
+  document.querySelectorAll('.navitem').forEach(function(n){n.classList.toggle('active', n.dataset.view===v && !n.dataset.fa);});
+  document.querySelectorAll('.subitem').forEach(function(s){s.classList.toggle('active', s.dataset.view===v);});
+  document.querySelectorAll('.subnav').forEach(function(s){s.classList.remove('show');});
+  document.querySelectorAll('.navitem[data-group]').forEach(function(n){n.classList.remove('open');});
+  var g=viewGroup[v];
+  if(g){
+    document.getElementById('sub-'+g).classList.add('show');
+    var p=document.querySelector('.navitem[data-group="'+g+'"]');
+    if(p) p.classList.add('open');
+  }
+}
+
+function show(v){
+  document.querySelectorAll('.view').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById('v-'+v);
+  if(el) el.classList.add('active');
+  setActiveNav(v);
+  document.getElementById('crumbView').textContent=labels[v]||'';
+  document.getElementById('canvas').scrollTo(0,0);
+  window.scrollTo(0,0);
+}
+
+function showSub(group,v){show(v);}
+
+document.querySelectorAll('.navitem[data-view]').forEach(function(n){
+  if(n.dataset.fa) return;
+  n.addEventListener('click',function(){show(n.dataset.view);});
+});
+document.querySelectorAll('.navitem[data-group]').forEach(function(n){
+  n.addEventListener('click',function(){
+    var g=n.dataset.group;
+    var sub=document.getElementById('sub-'+g);
+    var isOpen=sub.classList.contains('show');
+    document.querySelectorAll('.subnav').forEach(function(s){s.classList.remove('show');});
+    document.querySelectorAll('.navitem[data-group]').forEach(function(x){x.classList.remove('open');});
+    if(!isOpen){sub.classList.add('show');n.classList.add('open');}
+    // also navigate to first child
+    var first=sub.querySelector('.subitem');
+    if(first && !isOpen) show(first.dataset.view);
+  });
+});
+document.querySelectorAll('.subitem').forEach(function(s){s.addEventListener('click',function(){show(s.dataset.view);});});
+
+/* Methodology internal tabs */
+function mtab(id){
+  document.querySelectorAll('.mtab').forEach(function(t){t.classList.toggle('on',t.dataset.mtab===id);});
+  document.querySelectorAll('.mpane').forEach(function(p){p.classList.remove('active');});
+  var el=document.getElementById('m-'+id);
+  if(el) el.classList.add('active');
+}
+document.querySelectorAll('.mtab').forEach(function(t){t.addEventListener('click',function(){mtab(t.dataset.mtab);});});
+
+/* Focus-area switching */
+document.querySelectorAll('.navitem.fa').forEach(function(n){
+  n.addEventListener('click',function(){
+    document.querySelectorAll('.navitem.fa').forEach(function(x){x.classList.remove('active');});
+    n.classList.add('active');
+    var fa=n.dataset.fa;
+    if(fa==='robotics'){
+      document.getElementById('roboNav').style.display='';
+      document.getElementById('faPill').textContent='Orthopedic Robotics · EU entry';
+      show('cockpit');
+    } else {
+      document.getElementById('roboNav').style.display='none';
+      var t=fa==='sports'?'Sports Medicine':'Wound Therapy';
+      document.getElementById('faPill').textContent=t+' · scoped';
+      document.getElementById('fa-title').textContent=t;
+      document.querySelectorAll('.view').forEach(function(s){s.classList.remove('active');});
+      document.getElementById('v-fa-scoped').classList.add('active');
+      document.getElementById('crumbView').textContent=t;
+    }
+  });
+});
+
+/* ========== DATA ========== */
+var DATA={
+  Germany:{fund:'DRG / NUB / OPS',verdict:'Conditional Go',vp:'Secondary evidence supports a service-led, mid-tier entry. Verdict holds pending Gate 2 primary validation.',prob:68,market:'€210M',cagr:'13%',prize:'€13–17M',gauge:60,proc:'~20k',base:'~140',pen:'~11%',shares:{Mako:55,ROSA:20,VELYS:12,Other:13},forecast:[140,158,179,202,228,257]},
+  France:{fund:'GHS tariff / HAS',verdict:'Explore',vp:'Attractive but access is gated by HAS assessment and tariff timing. Validate reimbursement route before committing.',prob:57,market:'€165M',cagr:'12%',prize:'€8–11M',gauge:48,proc:'~16k',base:'~110',pen:'~9%',shares:{Mako:50,ROSA:22,VELYS:14,Other:14},forecast:[110,123,138,155,173,193]},
+  Italy:{fund:'Regional tenders',verdict:'Selective',vp:'Fragmented regional procurement rewards a targeted, region-by-region approach rather than a national launch.',prob:49,market:'€120M',cagr:'11%',prize:'€5–8M',gauge:38,proc:'~12k',base:'~85',pen:'~8%',shares:{Mako:48,ROSA:24,VELYS:13,Other:15},forecast:[85,95,106,118,131,145]},
+  Spain:{fund:'Autonomous-community procurement',verdict:'Selective',vp:'Community-level budgets and tenders mean uneven access; prioritise the highest-volume communities first.',prob:52,market:'€110M',cagr:'12%',prize:'€5–8M',gauge:40,proc:'~11k',base:'~80',pen:'~8%',shares:{Mako:47,ROSA:23,VELYS:15,Other:15},forecast:[80,90,101,113,127,142]},
+  UK:{fund:'NHS tariff / NICE + private',verdict:'Conditional Go',vp:'NICE evidence bar is high but the private and NHS trust routes offer a credible two-track entry.',prob:61,market:'€175M',cagr:'12%',prize:'€10–14M',gauge:54,proc:'~17k',base:'~120',pen:'~10%',shares:{Mako:52,ROSA:19,VELYS:14,Other:15},forecast:[120,134,150,168,188,210]}
+};
+var CUR='Germany';
+var CLAB={Mako:'Stryker · Mako',ROSA:'Zimmer · ROSA',VELYS:'DePuy · VELYS',Other:'Others / entrant'};
+var CCOL={Mako:'#43224d',ROSA:'#9b7aa8',VELYS:'#c9a2d6',Other:'#d9d0dd'};
+
+/* ========== CHART HELPERS ========== */
+function donut(pct){
+  var color=pct>=62?'#1b7a54':pct>=50?'#b8860b':'#e0044e';
+  var r=52,c=2*Math.PI*r,off=c*(1-pct/100);
+  return '<svg viewBox="0 0 140 140" width="132" height="132">'
+   +'<circle cx="70" cy="70" r="52" fill="none" stroke="#eee2ef" stroke-width="15"/>'
+   +'<circle cx="70" cy="70" r="52" fill="none" stroke="'+color+'" stroke-width="15" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 70 70)"/>'
+   +'<text x="70" y="66" text-anchor="middle" font-family="Crimson Text,serif" font-size="30" font-weight="700" fill="#43224d">'+pct+'%</text>'
+   +'<text x="70" y="86" text-anchor="middle" font-family="Poppins,sans-serif" font-size="8.5" fill="#8a7f90" letter-spacing="1">GO PROB.</text></svg>';
+}
+
+function bars(vals,lbls){
+  var W=360,H=180,padL=28,padB=24,padT=14,padR=8;
+  var max=Math.max.apply(null,vals)*1.15,n=vals.length,area=W-padL-padR,step=area/n,bw=step*0.5;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
+  for(var g=0;g<=4;g++){
+    var y=padT+(H-padT-padB)*g/4;
+    var val=Math.round(max*(1-g/4));
+    s+='<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="#f2eef6"/>';
+    s+='<text x="'+(padL-4)+'" y="'+(y+3)+'" text-anchor="end" font-size="8" fill="#b7abbf" font-family="Poppins">'+val+'</text>';
+  }
+  for(var i=0;i<n;i++){
+    var h=(H-padT-padB)*vals[i]/max;
+    var x=padL+step*i+(step-bw)/2;
+    var yb=H-padB-h;
+    var col=i===n-1?'#e0044e':'#43224d';
+    s+='<rect x="'+x.toFixed(1)+'" y="'+yb.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+col+'"/>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(yb-4).toFixed(1)+'" text-anchor="middle" font-size="8.5" font-weight="600" fill="#43224d" font-family="Poppins">'+vals[i]+'</text>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-padB+12)+'" text-anchor="middle" font-size="8" fill="#8a7f90" font-family="Poppins">'+lbls[i]+'</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+function sharesHTML(sh){
+  var order=['Mako','ROSA','VELYS','Other'],s='';
+  order.forEach(function(k){
+    s+='<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>'+CLAB[k]+'</span><b>'+sh[k]+'%</b></div><div class="bar"><span style="width:'+sh[k]+'%;background:'+CCOL[k]+'"></span></div></div>';
+  });
+  return s;
+}
+
+function groupHBar(dims,series,maxv){
+  var W=680,padT=8,padL=168,padR=40,rowH=56,barH=11,gap=3;
+  var H=padT+dims.length*rowH+8,plotW=W-padL-padR;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
+  for(var g=0;g<=5;g++){
+    var x=padL+plotW*g/5;
+    s+='<line x1="'+x+'" y1="'+padT+'" x2="'+x+'" y2="'+(H-8)+'" stroke="#f2eef6"/>';
+  }
+  dims.forEach(function(dim,di){
+    var y0=padT+di*rowH+8;
+    var cy=y0+(series.length*(barH+gap))/2;
+    s+='<text x="'+(padL-12)+'" y="'+(cy+3)+'" text-anchor="end" font-size="10.5" font-weight="500" fill="#43224d" font-family="Poppins">'+dim+'</text>';
+    series.forEach(function(se,si){
+      var v=se.vals[di];
+      var w=plotW*v/maxv;
+      var y=y0+si*(barH+gap);
+      s+='<rect x="'+padL+'" y="'+y+'" width="'+plotW+'" height="'+barH+'" rx="3" fill="#f0ecf4"/>';
+      s+='<rect x="'+padL+'" y="'+y+'" width="'+w.toFixed(1)+'" height="'+barH+'" rx="3" fill="'+se.color+'"/>';
+      s+='<text x="'+(padL+w+5).toFixed(1)+'" y="'+(y+barH-1.5)+'" font-size="9" font-weight="600" fill="#6b5f73" font-family="Poppins">'+v.toFixed(1)+'</text>';
+    });
+  });
+  s+='</svg>';
+  return s;
+}
+
+function heatCells(rows,cols,scores,entrantCol){
+  var s='<div class="ch"></div>';
+  cols.forEach(function(c){s+='<div class="ch">'+c+'</div>';});
+  rows.forEach(function(r,ri){
+    s+='<div class="rh">'+r+'</div>';
+    scores[ri].forEach(function(v,ci){
+      var cls=(entrantCol!=null&&ci===entrantCol)?' ent':'';
+      s+='<div class="hc hs'+v+cls+'">'+v+'</div>';
+    });
+  });
+  return s;
+}
+
+/* ========== RENDER (country-dependent) ========== */
+function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+
+function render(){
+  var d=DATA[CUR];
+  document.querySelectorAll('.cty').forEach(function(e){e.textContent=CUR;});
+  document.querySelectorAll('.ctab').forEach(function(t){t.classList.toggle('on',t.dataset.cty===CUR);});
+  // cockpit
+  set('cc-verdict',d.verdict);
+  set('cc-verdictp',d.vp);
+  set('cc-fund',d.fund);
+  set('cc-prize',d.prize);
+  set('cc-market2',d.market);
+  document.getElementById('cc-gauge').style.width=d.gauge+'%';
+  document.getElementById('cc-donut').innerHTML=donut(d.prob);
+  set('hl-market',d.market+' · '+d.cagr+' CAGR');
+  set('hl-comp','Mako ~'+d.shares.Mako+'%');
+  // market
+  set('mk-fund',d.fund);
+  set('mk-fund2',d.fund.split(' / ')[0]);
+  set('mk-proc',d.proc);
+  set('mk-base',d.base);
+  set('mk-pen',d.pen);
+  set('mk-market',d.market);
+  document.getElementById('mk-forecast').innerHTML=bars(d.forecast,['\'25','\'26','\'27','\'28','\'29','\'30']);
+  document.getElementById('mk-shares').innerHTML=sharesHTML(d.shares);
+}
+
+document.querySelectorAll('.ctab').forEach(function(t){
+  t.addEventListener('click',function(){CUR=t.dataset.cty;render();});
+});
+
+/* ========== STATIC CHARTS ========== */
+function drawStatic(){
+  // Product benchmark radar
+  document.getElementById('pr-bench').innerHTML=groupHBar(
+    ['Robotic accuracy','Technology / AI','After-sales service TAT','Ease of use','Low training burden','Clinical evidence'],
+    [{color:'#43224d',vals:[4.6,4.5,3.8,3.2,2.4,4.8]},
+     {color:'#9b7aa8',vals:[3.2,4.0,3.4,4.1,4.0,3.2]},
+     {color:'#e0044e',vals:[4.0,4.1,4.7,4.2,4.2,3.0]}],5);
+
+  // Product heat map
+  document.getElementById('pr-heat').innerHTML=heatCells(
+    ['Robotic accuracy','Imageless workflow','Implant openness','Software / analytics','OR setup speed','After-sales service TAT','Low training burden','Data / AI roadmap'],
+    ['Mako','ROSA','VELYS','Entrant'],
+    [[5,4,3,4],[2,3,5,4],[2,3,3,5],[5,4,3,4],[3,3,5,4],[4,3,3,5],[2,3,4,4],[5,3,3,4]],3);
+
+  // Promo heat
+  document.getElementById('promo-heat').innerHTML=heatCells(
+    ['HCP training academies','Hospital tie-ups','Congress presence','Digital / social','Patient-forum sponsorship'],
+    ['Mako','ROSA','VELYS'],
+    [[5,4,3],[5,4,3],[5,4,3],[4,3,3],[3,2,2]],null);
+
+  // Willingness-to-switch donut
+  (function(){
+    var pct=58,r=52,c=2*Math.PI*r,off=c*(1-pct/100);
+    document.getElementById('q-donut').innerHTML='<svg viewBox="0 0 140 140" width="128" height="128">'
+      +'<circle cx="70" cy="70" r="52" fill="none" stroke="#eee2ef" stroke-width="15"/>'
+      +'<circle cx="70" cy="70" r="52" fill="none" stroke="#e0044e" stroke-width="15" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 70 70)"/>'
+      +'<text x="70" y="66" text-anchor="middle" font-family="Crimson Text,serif" font-size="28" font-weight="700" fill="#43224d">'+pct+'%</text>'
+      +'<text x="70" y="85" text-anchor="middle" font-size="8" fill="#8a7f90" font-family="Poppins">WOULD SWITCH</text></svg>';
+  })();
+}
+</script>
+</body>
+</html>
